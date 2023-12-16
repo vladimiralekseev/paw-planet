@@ -1,0 +1,66 @@
+{
+    "name": "branson/restaurants",
+    "description": "Branson restaurants",
+    "keywords": ["branson", "restaurants"],
+    "homepage": "http://www.yiiframework.com/",
+    "type": "project",
+    "license": "BSD-3-Clause",
+    "support": {
+        "issues": "https://github.com/yiisoft/yii2/issues?state=open",
+        "forum": "http://www.yiiframework.com/forum/",
+        "wiki": "http://www.yiiframework.com/wiki/",
+        "irc": "irc://irc.freenode.net/yii",
+        "source": "https://github.com/yiisoft/yii2"
+    },
+    "minimum-stability": "dev",
+	"prefer-stable" : true,
+    "require": {
+        "php": ">=7.4.0",
+        "yiisoft/yii2": "*",
+        "yiisoft/yii2-bootstrap": "*",
+        "yiisoft/yii2-bootstrap5": "~2.0.2",
+        "yiisoft/yii2-swiftmailer": "*",
+        "yiisoft/yii2-jui": "~2.0.0",
+        "webvimark/module-user-management": "*",
+        "dmstr/yii2-adminlte-asset": "*",
+            "almasaeed2010/adminlte": "v2.3.11",
+        "vladimir-alekseev-go/yii2-image-processor": ">=v1.1.2",
+        "yiisoft/yii2-authclient": "^2.1.8",
+        "rmrevin/yii2-minify-view": "^1.15",
+        "himiklab/yii2-recaptcha-widget" : "*",
+        "ext-dom": "*",
+        "ext-libxml": "*",
+        "ext-fileinfo": "*",
+        "ext-curl": "*",
+        "guzzlehttp/guzzle" : "*",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "yiisoft/yii2-debug": "*",
+        "yiisoft/yii2-gii": "*"
+    },
+    "config": {
+        "process-timeout": 1800,
+        "optimize-autoloader": true,
+        "fxp-asset": {
+            "enabled": "false"
+        },
+        "platform": {
+            "php": "7.4"
+        },
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ],
+    "autoload": {
+        "classmap": [
+            "common/models/source"
+        ]
+    }
+}
