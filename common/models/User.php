@@ -64,7 +64,6 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        var_dump(111);exit();
         return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
     }
 
@@ -73,8 +72,6 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        return static::find()->one();
-//        var_dump(111);exit();
         throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
     }
 
@@ -97,7 +94,6 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByPasswordResetToken($token)
     {
-        var_dump(111);exit();
         if (!static::isPasswordResetTokenValid($token)) {
             return null;
         }
@@ -160,7 +156,6 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function validateAuthKey($authKey)
     {
-        var_dump(111);exit();
         return $this->getAuthKey() === $authKey;
     }
 
