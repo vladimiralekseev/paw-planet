@@ -18,7 +18,11 @@ use yii\helpers\Html;
 
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle">
-                        <span class="hidden-xs"><?= User::getCurrentUser($fromSingleton = true)->username ?></span>
+                        <span class="hidden-xs"><?=
+                            User::getCurrentUser($fromSingleton = true)
+                                ? User::getCurrentUser($fromSingleton = true)->username
+                                : ''
+                            ?></span>
                     </a>
                 </li>
             </ul>
