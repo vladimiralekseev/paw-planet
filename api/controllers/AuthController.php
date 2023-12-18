@@ -22,6 +22,8 @@ class AuthController extends BaseController
                     'class'   => VerbFilter::class,
                     'actions' => [
                         'signup' => ['post'],
+                        'login' => ['post'],
+                        'verify-email' => ['get'],
                     ],
                 ],
             ]
