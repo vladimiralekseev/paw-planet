@@ -33,7 +33,9 @@
         "ext-fileinfo": "*",
         "ext-curl": "*",
         "guzzlehttp/guzzle" : "*",
-        "ext-json": "*"
+        "ext-json": "*",
+        "zircote/swagger-php": "*",
+        "doctrine/annotations": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "*",

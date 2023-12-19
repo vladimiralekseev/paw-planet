@@ -2,8 +2,10 @@
 
 namespace api\controllers;
 
-use frontend\models\ResendVerificationEmailForm;
-use frontend\models\VerifyEmailForm;
+//use frontend\models\ResendVerificationEmailForm;
+
+use OpenApi\Annotations\OpenApi;
+use OpenApi\Generator;
 use Yii;
 use yii\authclient\AuthAction;
 use yii\filters\auth\HttpBearerAuth;
@@ -11,16 +13,20 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\models\LoginForm;
-use frontend\models\PasswordResetRequestForm;
-use frontend\models\ResetPasswordForm;
-use frontend\models\SignupForm;
-use frontend\models\ContactForm;
+//use common\models\LoginForm;
+//use frontend\models\PasswordResetRequestForm;
+//use frontend\models\ResetPasswordForm;
+//use frontend\models\SignupForm;
+//use frontend\models\ContactForm;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 /**
- * Site controller
+ * @OA\Info(
+ *     title="Paw Palanet API",
+ *     version="1.0"
+ * )
  */
 class SiteController extends BaseController
 {
@@ -39,14 +45,15 @@ class SiteController extends BaseController
 //    {
 //    }
 
-    /**
-     * Displays homepage.
-     *
-     * @return mixed
-     */
     public function actionIndex()
     {
-        return [];
+        Yii::$app->response->format = Response::FORMAT_HTML;
+        return $this->render('index');
+    }
+
+    public function actionSvagerJson(): ?OpenApi
+    {
+        return Generator::scan(['./../']);
     }
 //
 //    /**

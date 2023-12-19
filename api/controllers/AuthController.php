@@ -31,6 +31,62 @@ class AuthController extends BaseController
     }
 
     /**
+     * @OA\Post(
+     *     path="/auth/signup/",
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="username",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="email",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="password",
+     *                     type="string"
+     *                 ),
+     *                 example={"username": "username", "email": "email@email.com", "password": "987asdfi7i87"}
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="The data",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     @OA\Property(
+     *                         property="name",
+     *                         type="string"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="status",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="code",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="message",
+     *                         type="string"
+     *                     ),
+     *                     example={
+     *                         "name": "Success",
+     *                         "status": 200,
+     *                         "code": 0,
+     *                         "message": "Thank you for registration. Please check your inbox for verification email."
+     *                     }
+     *                 )
+     *             )
+     *         }
+     *     )
+     * )
      * @return string[]
      * @throws BadRequestHttpException
      */
