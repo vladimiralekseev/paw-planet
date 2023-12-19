@@ -27,6 +27,15 @@ use yii\web\Response;
  *     title="Paw Palanet API",
  *     version="1.0"
  * )
+ * @OA\Schemes(format="http")
+ * @OA\SecurityScheme(
+ *      securityScheme="bearerAuth",
+ *      in="header",
+ *      name="Authorization",
+ *      type="http",
+ *      scheme="bearer",
+ *      bearerFormat="JWT",
+ * ),
  */
 class SiteController extends BaseController
 {
@@ -51,46 +60,11 @@ class SiteController extends BaseController
         return $this->render('index');
     }
 
-    public function actionSvagerJson(): ?OpenApi
+    public function actionSwaggerJson(): ?OpenApi
     {
         return Generator::scan(['./../']);
     }
-//
-//    /**
-//     * Logs out the current user.
-//     *
-//     * @return mixed
-//     */
-//    public function actionLogout()
-//    {
-//        Yii::$app->user->logout();
-//
-////        return $this->goHome();
-//    }
-//
-//    /**
-//     * Displays contact page.
-//     *
-//     * @return mixed
-//     */
-//    public function actionContact()
-//    {
-//        $model = new ContactForm();
-//        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-//            if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
-//                Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
-//            } else {
-//                Yii::$app->session->setFlash('error', 'There was an error sending your message.');
-//            }
-//
-//            return $this->refresh();
-//        }
-//
-//        return $this->render('contact', [
-//            'model' => $model,
-//        ]);
-//    }
-//
+
 //    /**
 //     * Requests password reset.
 //     *

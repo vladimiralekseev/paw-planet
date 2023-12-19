@@ -39,7 +39,7 @@
         // Begin Swagger UI call region
         console.log(window.location.pathname);
         const ui = SwaggerUIBundle({
-            url: window.location.protocol + "//" + window.location.hostname + "/site/svager-json/",
+            url: window.location.protocol + "//" + window.location.hostname + "/site/swagger-json/",
             dom_id: '#swagger-ui',
             deepLinking: true,
             presets: [

@@ -6,6 +6,7 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
 use yii\web\IdentityInterface;
 
 /**
@@ -25,17 +26,21 @@ use yii\web\IdentityInterface;
  */
 class SiteUser extends _source_SiteUser implements IdentityInterface
 {
-    const STATUS_DELETED = 0;
-    const STATUS_INACTIVE = 9;
-    const STATUS_ACTIVE = 10;
+    public const STATUS_DELETED  = 0;
+    public const STATUS_INACTIVE = 9;
+    public const STATUS_ACTIVE   = 10;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
-            TimestampBehavior::class,
+            'timestamp' => [
+                'class'      => TimestampBehavior::class,
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_at',
+                ],
+                'value'      => new Expression('NOW()'),
+            ],
         ];
     }
 
@@ -48,6 +53,36 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
         ];
+    }
+
+    public function fields(): array
+    {
+        return [
+            'username',
+            'email',
+            'statusCode' => 'status',
+            'status' => static function($model) {
+                return self::getStatusValue($model->status);
+            },
+            'created_at',
+            'created_at',
+        ];
+    }
+
+    public static function getStatusList(): array
+    {
+        return [
+            self::STATUS_ACTIVE   => 'Active',
+            self::STATUS_INACTIVE => 'Inactive',
+            self::STATUS_DELETED  => 'Deleted',
+        ];
+    }
+
+    public static function getStatusValue($val): string
+    {
+        $ar = self::getStatusList();
+
+        return $ar[$val] ?? $val;
     }
 
     /**
@@ -64,7 +99,12 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        return static::find()->where(['verification_token' => $token])->one();
+        return static::find()->where(
+            [
+                'token'  => $token,
+                'status' => self::STATUS_ACTIVE
+            ]
+        )->joinWith('siteUserTokens')->one();
 //        var_dump(111);exit();
         throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
     }

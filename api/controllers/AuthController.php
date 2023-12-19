@@ -34,6 +34,7 @@ class AuthController extends BaseController
     /**
      * @OA\Post(
      *     path="/auth/signup/",
+     *     tags={"Auth"},
      *     @OA\RequestBody(
      *         @OA\MediaType(
      *             mediaType="application/json",
@@ -109,6 +110,7 @@ class AuthController extends BaseController
     /**
      * @OA\Get(
      *     path="/auth/verify-email/",
+     *     tags={"Auth"},
      *     @OA\Parameter(
      *          name="token",
      *          in="query",
@@ -179,6 +181,7 @@ class AuthController extends BaseController
     /**
      * @OA\Post(
      *     path="/auth/signin/",
+     *     tags={"Auth"},
      *     @OA\RequestBody(
      *         @OA\MediaType(
      *             mediaType="application/json",
