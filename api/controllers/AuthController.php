@@ -106,7 +106,50 @@ class AuthController extends BaseController
     }
 
     /**
-     * Verify email address
+     * @OA\Get(
+     *     path="/auth/verify-email/",
+     *     @OA\Parameter(
+     *          name="token",
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string",
+     *          ),
+     *          style="form"
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="The data",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     @OA\Property(
+     *                         property="name",
+     *                         type="string"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="status",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="code",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="message",
+     *                         type="string"
+     *                     ),
+     *                     example={
+     *                         "name": "Success",
+     *                         "status": 200,
+     *                         "code": 0,
+     *                         "message": "Your email has been confirmed!"
+     *                     }
+     *                 )
+     *             )
+     *         }
+     *     )
+     * )
      *
      * @param string $token
      *
