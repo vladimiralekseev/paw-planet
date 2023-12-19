@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use DateInterval;
 use DateTime;
 use Yii;
 use yii\behaviors\TimestampBehavior;
@@ -22,10 +23,10 @@ class SiteUserToken extends _source_SiteUserToken
             ],
         ];
     }
-    public function fields()
+
+    public function fields(): array
     {
         return [
-            'user_id' => 'site_user_id',
             'token',
             'expired_at',
             'created_at',
@@ -34,11 +35,12 @@ class SiteUserToken extends _source_SiteUserToken
 
     public static function generate($user)
     {
+        self::deleteAll(['<', 'expired_at', (new DateTime())->format('Y-m-d h:i:s')]);
         $token = new self(
             [
                 'site_user_id' => $user->id,
                 'token'        => bin2hex(random_bytes(64)),
-                'expired_at'   => (new DateTime())->format('Y-m-d h:i:s'),
+                'expired_at'   => (new DateTime())->add(new DateInterval('P1D'))->format('Y-m-d h:i:s'),
             ]
         );
         $token->save();

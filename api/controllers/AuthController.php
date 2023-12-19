@@ -10,6 +10,7 @@ use yii\base\InvalidArgumentException;
 use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
+use yii\web\UnauthorizedHttpException;
 
 class AuthController extends BaseController
 {
@@ -176,10 +177,59 @@ class AuthController extends BaseController
     }
 
     /**
+     * @OA\Post(
+     *     path="/auth/signin/",
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="username",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="password",
+     *                     type="string"
+     *                 ),
+     *                 example={"username": "username", "password": "password"}
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="The data",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     @OA\Property(
+     *                         property="token",
+     *                         type="string"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="expired_at",
+     *                         type="string"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="created_at",
+     *                         type="string"
+     *                     ),
+     *                     example={
+     *                         "token":
+     *     "846d50d91708ae02362e3e19333ddae8aea561c5b83ccb153d79a8e444ddb86850399a67d647a6cdedd946ef05bf68899e5b7002002719b4dc37790c8c11f4a2",
+     *                         "expired_at": "2023-12-20 07:47:33",
+     *                         "created_at": "2023-12-19 19:47:33"
+     *                     }
+     *                 )
+     *             )
+     *         }
+     *     )
+     * )
      * @return array|Response
      * @throws BadRequestHttpException
+     * @throws UnauthorizedHttpException
      */
-    public function actionLogin()
+    public function actionSignin()
     {
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
@@ -193,7 +243,7 @@ class AuthController extends BaseController
         $model->password = '';
 
         if ($errors = $model->getErrorSummary(true)) {
-            throw new BadRequestHttpException(array_shift($errors));
+            throw new UnauthorizedHttpException(array_shift($errors));
         }
 
         throw new BadRequestHttpException('Undefined error');
