@@ -3,7 +3,9 @@
 /** @var yii\web\View $this */
 /** @var common\models\User $user */
 
-$resetLink = Yii::$app->urlManager->createAbsoluteUrl(['site/reset-password', 'token' => $user->password_reset_token]);
+use yii\helpers\Url;
+
+$resetLink = 'https://' . Yii::$app->params['domainRoot'] . Url::to(['site/reset-password', 'token' => $user->password_reset_token]);
 ?>
 Hello <?= trim($user->first_name . ' ' . $user->first_name) ?>,
 
