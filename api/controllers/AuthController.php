@@ -3,6 +3,7 @@
 namespace api\controllers;
 
 use api\models\forms\LoginForm;
+use api\models\forms\PasswordResetRequestForm;
 use api\models\forms\SignupForm;
 use api\models\forms\VerifyEmailForm;
 use Yii;
@@ -251,4 +252,67 @@ class AuthController extends BaseController
 
         throw new BadRequestHttpException('Undefined error');
     }
+
+    /**
+     * Requests password reset.
+     *
+     * @OA\Post(
+     *     path="/auth/request-password-reset/",
+     *     tags={"Auth"},
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="email",
+     *                     type="string"
+     *                 ),
+     *                 example={"email": "email@site.com"}
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="The data",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     example={
+     *                         "name": "Success",
+     *                         "status": 200,
+     *                         "code": 0,
+     *                         "message": "Check your email for further instructions."
+     *                     }
+     *                 )
+     *             )
+     *         }
+     *     )
+     * )
+     *
+     * @return array
+     * @throws BadRequestHttpException
+     */
+    public function actionRequestPasswordReset(): array
+    {
+        $model = new PasswordResetRequestForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->sendEmail()) {
+                return $this->successResponse(
+                    'Check your email for further instructions.'
+                );
+            }
+
+            throw new BadRequestHttpException(
+                'Sorry, we are unable to reset password for the provided email address.'
+            );
+        }
+
+        if ($errors = $model->getErrorSummary(true)) {
+            throw new BadRequestHttpException(array_shift($errors));
+        }
+
+        throw new BadRequestHttpException('Undefined error');
+    }
+
 }

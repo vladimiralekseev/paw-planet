@@ -1,10 +1,10 @@
 <?php
 
-namespace api\models;
+namespace api\models\forms;
 
+use common\models\SiteUser;
 use Yii;
 use yii\base\Model;
-use common\models\User;
 
 /**
  * Password reset request form
@@ -13,19 +13,23 @@ class PasswordResetRequestForm extends Model
 {
     public $email;
 
+    public function formName(): string
+    {
+        return '';
+    }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             ['email', 'trim'],
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'exist',
-                'targetClass' => '\common\models\User',
-                'filter' => ['status' => User::STATUS_ACTIVE],
+                'targetClass' => SiteUser::class,
+                'filter' => ['status' => SiteUser::STATUS_ACTIVE],
                 'message' => 'There is no user with this email address.'
             ],
         ];
@@ -36,11 +40,11 @@ class PasswordResetRequestForm extends Model
      *
      * @return bool whether the email was send
      */
-    public function sendEmail()
+    public function sendEmail(): bool
     {
-        /* @var $user User */
-        $user = User::findOne([
-            'status' => User::STATUS_ACTIVE,
+        /* @var $user SiteUser */
+        $user = SiteUser::findOne([
+            'status' => SiteUser::STATUS_ACTIVE,
             'email' => $this->email,
         ]);
 
@@ -48,7 +52,7 @@ class PasswordResetRequestForm extends Model
             return false;
         }
 
-        if (!User::isPasswordResetTokenValid($user->password_reset_token)) {
+        if (!SiteUser::isPasswordResetTokenValid($user->password_reset_token)) {
             $user->generatePasswordResetToken();
             if (!$user->save()) {
                 return false;
