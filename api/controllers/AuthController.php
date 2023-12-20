@@ -48,7 +48,11 @@ class AuthController extends BaseController
      *             mediaType="application/json",
      *             @OA\Schema(
      *                 @OA\Property(
-     *                     property="username",
+     *                     property="first_name",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="last_name",
      *                     type="string"
      *                 ),
      *                 @OA\Property(
@@ -59,7 +63,8 @@ class AuthController extends BaseController
      *                     property="password",
      *                     type="string"
      *                 ),
-     *                 example={"username": "username", "email": "email@email.com", "password": "987asdfi7i87"}
+     *                 example={"first_name": "firstname", "last_name": "lastname", "email": "email@email.com",
+     *     "password": "987asdfi7i87"}
      *             )
      *         )
      *     ),

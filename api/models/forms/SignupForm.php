@@ -4,7 +4,6 @@ namespace api\models\forms;
 
 use Yii;
 use yii\base\Model;
-use common\models\User;
 use common\models\SiteUser;
 
 /**
@@ -12,9 +11,10 @@ use common\models\SiteUser;
  */
 class SignupForm extends Model
 {
-    public $username;
     public $email;
     public $password;
+    public $last_name;
+    public $first_name;
 
     public function formName(): string
     {
@@ -24,21 +24,16 @@ class SignupForm extends Model
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            ['username', 'trim'],
-            ['username', 'required'],
-            ['username', 'unique', 'targetClass' => SiteUser::class, 'message' => 'This username has already been taken.'],
-            ['username', 'string', 'min' => 2, 'max' => 255],
-
-            ['email', 'trim'],
-            ['email', 'required'],
+            [['email'], 'trim'],
+            [['email', 'password', 'first_name'], 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
+            [['first_name', 'last_name'], 'string', 'max' => 128],
+            [['first_name', 'last_name'], 'filter', 'filter' => '\yii\helpers\HtmlPurifier::process'], //xss protection
             ['email', 'unique', 'targetClass' => SiteUser::class, 'message' => 'This email address has already been taken.'],
-
-            ['password', 'required'],
             ['password', 'string', 'min' => Yii::$app->params['user.passwordMinLength']],
         ];
     }
@@ -48,15 +43,17 @@ class SignupForm extends Model
      *
      * @return bool whether the creating new account was successful and email was sent
      */
-    public function signup()
+    public function signup(): ?bool
     {
         if (!$this->validate()) {
             return null;
         }
 
         $user = new SiteUser();
-        $user->username = $this->username;
+        $user->username = $this->email;
         $user->email = $this->email;
+        $user->first_name = $this->first_name;
+        $user->last_name = $this->last_name;
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
@@ -66,10 +63,10 @@ class SignupForm extends Model
 
     /**
      * Sends confirmation email to user
-     * @param User $user user model to with email should be send
+     * @param SiteUser $user user model to with email should be send
      * @return bool whether the email was sent
      */
-    protected function sendEmail($user)
+    protected function sendEmail(SiteUser $user): bool
     {
         return Yii::$app
             ->mailer

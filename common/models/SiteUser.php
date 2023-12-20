@@ -58,8 +58,16 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
     public function fields(): array
     {
         return [
-            'username',
+            'last_name',
+            'first_name',
+            'phone_number',
+            'about',
             'email',
+            'my_location',
+            'latitude',
+            'longitude',
+            'whats_app',
+            'facebook',
             'statusCode' => 'status',
             'status' => static function($model) {
                 return self::getStatusValue($model->status);
