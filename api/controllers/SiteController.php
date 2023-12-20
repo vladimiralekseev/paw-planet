@@ -2,24 +2,9 @@
 
 namespace api\controllers;
 
-//use frontend\models\ResendVerificationEmailForm;
-
 use OpenApi\Annotations\OpenApi;
 use OpenApi\Generator;
 use Yii;
-use yii\authclient\AuthAction;
-use yii\filters\auth\HttpBearerAuth;
-use yii\web\BadRequestHttpException;
-use yii\web\Controller;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
-//use common\models\LoginForm;
-//use frontend\models\PasswordResetRequestForm;
-//use frontend\models\ResetPasswordForm;
-//use frontend\models\SignupForm;
-//use frontend\models\ContactForm;
-use yii\web\ForbiddenHttpException;
-use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 /**
@@ -39,22 +24,7 @@ use yii\web\Response;
  */
 class SiteController extends BaseController
 {
-
-//    public function actions()
-//    {
-//        return [
-//            'error' => [
-//                'class' => \yii\web\ErrorAction::class,
-//            ],
-//        ];
-//    }
-
-
-//    public function actionError()
-//    {
-//    }
-
-    public function actionIndex()
+    public function actionIndex(): string
     {
         Yii::$app->response->format = Response::FORMAT_HTML;
         return $this->render('index');
@@ -64,25 +34,4 @@ class SiteController extends BaseController
     {
         return Generator::scan(['./../']);
     }
-//
-//    /**
-//     * Resend verification email
-//     *
-//     * @return mixed
-//     */
-//    public function actionResendVerificationEmail()
-//    {
-//        $model = new ResendVerificationEmailForm();
-//        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-//            if ($model->sendEmail()) {
-//                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
-//                return $this->goHome();
-//            }
-//            Yii::$app->session->setFlash('error', 'Sorry, we are unable to resend verification email for the provided email address.');
-//        }
-//
-//        return $this->render('resendVerificationEmail', [
-//            'model' => $model
-//        ]);
-//    }
 }

@@ -4,6 +4,7 @@ namespace api\controllers;
 
 use api\models\forms\LoginForm;
 use api\models\forms\PasswordResetRequestForm;
+use api\models\forms\ResendVerificationEmailForm;
 use api\models\forms\ResetPasswordForm;
 use api\models\forms\SignupForm;
 use api\models\forms\VerifyEmailForm;
@@ -24,11 +25,12 @@ class AuthController extends BaseController
                 'verbs' => [
                     'class'   => VerbFilter::class,
                     'actions' => [
-                        'signup'                 => ['post'],
-                        'login'                  => ['post'],
-                        'verify-email'           => ['get'],
-                        'request-password-reset' => ['post'],
-                        'reset-password'         => ['post'],
+                        'signup'                    => ['post'],
+                        'login'                     => ['post'],
+                        'verify-email'              => ['get'],
+                        'request-password-reset'    => ['post'],
+                        'reset-password'            => ['post'],
+                        'resend-verification-email' => ['post'],
                     ],
                 ],
             ]
@@ -37,7 +39,7 @@ class AuthController extends BaseController
 
     /**
      * Create a user.
-     * 
+     *
      * @OA\Post(
      *     path="/auth/signup/",
      *     tags={"Auth"},
@@ -104,6 +106,67 @@ class AuthController extends BaseController
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
             return $this->successResponse(
                 'Thank you for registration. Please check your inbox for verification email.'
+            );
+        }
+        if ($errors = $model->getErrorSummary(true)) {
+            throw new BadRequestHttpException(array_shift($errors));
+        }
+
+        throw new BadRequestHttpException('Undefined error');
+    }
+
+    /**
+     * Resend verification email.
+     *
+     * @OA\Post(
+     *     path="/auth/resend-verification-email/",
+     *     tags={"Auth"},
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="email",
+     *                     type="string"
+     *                 ),
+     *                 example={"email": "email@site.com"}
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="The data",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     example={
+     *                         "name": "Success",
+     *                         "status": 200,
+     *                         "code": 0,
+     *                         "message": "Check your email for further instructions."
+     *                     }
+     *                 )
+     *             )
+     *         }
+     *     )
+     * )
+     *
+     * @return array|string
+     * @throws BadRequestHttpException
+     */
+    public function actionResendVerificationEmail()
+    {
+        $model = new ResendVerificationEmailForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->sendEmail()) {
+                return $this->successResponse(
+                    'Check your email for further instructions.'
+                );
+            }
+
+            throw new BadRequestHttpException(
+                'Sorry, we are unable to resend verification email for the provided email address.'
             );
         }
         if ($errors = $model->getErrorSummary(true)) {
@@ -393,5 +456,4 @@ class AuthController extends BaseController
 
         throw new BadRequestHttpException('Undefined error');
     }
-
 }
