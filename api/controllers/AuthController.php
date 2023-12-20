@@ -265,14 +265,14 @@ class AuthController extends BaseController
      *             mediaType="application/json",
      *             @OA\Schema(
      *                 @OA\Property(
-     *                     property="username",
+     *                     property="email",
      *                     type="string"
      *                 ),
      *                 @OA\Property(
      *                     property="password",
      *                     type="string"
      *                 ),
-     *                 example={"username": "username", "password": "password"}
+     *                 example={"email": "email@site.com", "password": "password"}
      *             )
      *         )
      *     ),

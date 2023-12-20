@@ -43,11 +43,21 @@ class UserProfileController extends AccessController
      *                 mediaType="application/json",
      *                 @OA\Schema(
      *                     example={
-     *                     "username": "username2",
-     *                     "email": "email2222@email.com",
-     *                     "statusCode": 10,
-     *                     "status": "Active",
-     *                     "created_at": "2023-12-19 21:22:44"
+     *                     "id": 11,
+     *                     "last_name": "lastname",
+     *                     "first_name": "firstname",
+     *                     "phone_number": null,
+     *                     "about": null,
+     *                     "email": "emaidddddl@email.com",
+     *                     "my_location": null,
+     *                     "latitude": null,
+     *                     "longitude": null,
+     *                     "whats_app": null,
+     *                     "facebook": null,
+     *                     "status": 10,
+     *                     "status_name": "Active",
+     *                     "updated_at": "2023-12-20 14:42:06",
+     *                     "created_at": "2023-12-20 14:42:06"
      *                     }
      *                 )
      *             )

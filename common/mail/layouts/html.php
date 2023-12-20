@@ -22,7 +22,7 @@ use yii\web\View;
 <div style="margin:0 auto;max-width:600px;background:#fff;padding:20px;">
     <div style="text-align:center;margin:0 0 20px;padding:0 0 20px;border-bottom:5px solid #1C47B3;">
         <a style="color:#1C47B3;" href="https://<?= Yii::$app->params['domainRoot'] ?>">
-            <img src="https://<?= Yii::$app->params['domainRoot'] ?>/img/logo-3.png" alt="Paw Planet">
+            <img src="https://<?= Yii::$app->params['domainRoot'] ?>/assets/logo-27KpT_gT.png" alt="Paw Planet">
         </a>
     </div>
     <?= $content ?>
