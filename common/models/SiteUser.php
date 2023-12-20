@@ -126,9 +126,8 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
      * @param string $token password reset token
      * @return static|null
      */
-    public static function findByPasswordResetToken($token)
+    public static function findByPasswordResetToken($token): ?SiteUser
     {
-        var_dump(111);exit();
         if (!static::isPasswordResetTokenValid($token)) {
             return null;
         }
@@ -189,9 +188,8 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
     /**
      * {@inheritdoc}
      */
-    public function validateAuthKey($authKey)
+    public function validateAuthKey($authKey): ?bool
     {
-        var_dump(111);exit();
         return $this->getAuthKey() === $authKey;
     }
 

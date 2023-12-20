@@ -64,32 +64,6 @@ class SiteController extends BaseController
     {
         return Generator::scan(['./../']);
     }
-
-//    /**
-//     * Resets password.
-//     *
-//     * @param string $token
-//     * @return mixed
-//     * @throws BadRequestHttpException
-//     */
-//    public function actionResetPassword($token)
-//    {
-//        try {
-//            $model = new ResetPasswordForm($token);
-//        } catch (InvalidArgumentException $e) {
-//            throw new BadRequestHttpException($e->getMessage());
-//        }
-//
-//        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-//            Yii::$app->session->setFlash('success', 'New password saved.');
-//
-//            return $this->goHome();
-//        }
-//
-//        return $this->render('resetPassword', [
-//            'model' => $model,
-//        ]);
-//    }
 //
 //    /**
 //     * Resend verification email

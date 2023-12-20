@@ -4,6 +4,7 @@ namespace api\controllers;
 
 use api\models\forms\LoginForm;
 use api\models\forms\PasswordResetRequestForm;
+use api\models\forms\ResetPasswordForm;
 use api\models\forms\SignupForm;
 use api\models\forms\VerifyEmailForm;
 use Yii;
@@ -23,9 +24,11 @@ class AuthController extends BaseController
                 'verbs' => [
                     'class'   => VerbFilter::class,
                     'actions' => [
-                        'signup' => ['post'],
-                        'login' => ['post'],
-                        'verify-email' => ['get'],
+                        'signup'                 => ['post'],
+                        'login'                  => ['post'],
+                        'verify-email'           => ['get'],
+                        'request-password-reset' => ['post'],
+                        'reset-password'         => ['post'],
                     ],
                 ],
             ]
@@ -33,6 +36,8 @@ class AuthController extends BaseController
     }
 
     /**
+     * Create a user.
+     * 
      * @OA\Post(
      *     path="/auth/signup/",
      *     tags={"Auth"},
@@ -109,6 +114,8 @@ class AuthController extends BaseController
     }
 
     /**
+     * Verify a email.
+     *
      * @OA\Get(
      *     path="/auth/verify-email/",
      *     tags={"Auth"},
@@ -180,6 +187,8 @@ class AuthController extends BaseController
     }
 
     /**
+     * Get a token.
+     *
      * @OA\Post(
      *     path="/auth/signin/",
      *     tags={"Auth"},
@@ -305,6 +314,76 @@ class AuthController extends BaseController
 
             throw new BadRequestHttpException(
                 'Sorry, we are unable to reset password for the provided email address.'
+            );
+        }
+
+        if ($errors = $model->getErrorSummary(true)) {
+            throw new BadRequestHttpException(array_shift($errors));
+        }
+
+        throw new BadRequestHttpException('Undefined error');
+    }
+
+    /**
+     * Resets password.
+     *
+     * @OA\Post(
+     *     path="/auth/reset-password/",
+     *     tags={"Auth"},
+     *     @OA\Parameter(
+     *          name="token",
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string",
+     *          ),
+     *          style="form"
+     *     ),
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="password",
+     *                     type="string"
+     *                 ),
+     *                 example={"password": "VVpp!!11"}
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="The data",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     example={
+     *                         "name": "Success",
+     *                         "status": 200,
+     *                         "code": 0,
+     *                         "message": "New password saved."
+     *                     }
+     *                 )
+     *             )
+     *         }
+     *     )
+     * )
+     *
+     * @param string $token
+     * @return mixed
+     * @throws BadRequestHttpException
+     */
+    public function actionResetPassword($token)
+    {
+        try {
+            $model = new ResetPasswordForm($token);
+        } catch (InvalidArgumentException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
+            return $this->successResponse(
+                'New password saved.'
             );
         }
 
