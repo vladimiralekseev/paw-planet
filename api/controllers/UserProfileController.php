@@ -2,8 +2,10 @@
 
 namespace api\controllers;
 
+use api\models\forms\UserProfileForm;
 use Yii;
 use yii\filters\VerbFilter;
+use yii\web\BadRequestHttpException;
 use yii\web\IdentityInterface;
 
 class UserProfileController extends AccessController
@@ -17,11 +19,13 @@ class UserProfileController extends AccessController
                     'class'   => VerbFilter::class,
                     'actions' => [
                         'index' => ['get'],
+                        'update' => ['post'],
                     ],
                 ],
             ]
         );
     }
+
     /**
      * @OA\Get(
      *     path="/user-profile/",
@@ -37,7 +41,7 @@ class UserProfileController extends AccessController
      *      ),
      *     @OA\Response(
      *         response="200",
-     *         description="The data",
+     *         description="The user data",
      *         content={
      *             @OA\MediaType(
      *                 mediaType="application/json",
@@ -68,5 +72,127 @@ class UserProfileController extends AccessController
     public function actionIndex(): IdentityInterface
     {
         return Yii::$app->user->identity;
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/user-profile/update/",
+     *     security={{"bearerAuth":{}}},
+     *     tags={"User"},
+     *     @OA\SecurityScheme(
+     *          securityScheme="bearerAuth",
+     *          in="header",
+     *          name="bearerAuth",
+     *          type="http",
+     *          scheme="bearer",
+     *          bearerFormat="JWT",
+     *      ),
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="last_name",
+     *                     type="string",
+     *                     maxLength=128,
+     *                 ),
+     *                 @OA\Property(
+     *                     property="firstname",
+     *                     type="string",
+     *                     maxLength=128,
+     *                 ),
+     *                 @OA\Property(
+     *                     property="email",
+     *                     type="string",
+     *                     maxLength=255,
+     *                 ),
+     *                 @OA\Property(
+     *                     property="phone_number",
+     *                     type="string",
+     *                     maxLength=64,
+     *                 ),
+     *                 @OA\Property(
+     *                     property="whats_app",
+     *                     type="string",
+     *                     maxLength=256,
+     *                 ),
+     *                 @OA\Property(
+     *                     property="facebook",
+     *                     type="string",
+     *                     maxLength=256,
+     *                 ),
+     *                 @OA\Property(
+     *                     property="latitude",
+     *                     type="number",
+     *                 ),
+     *                 @OA\Property(
+     *                     property="longitude",
+     *                     type="number",
+     *                 ),
+     *                 example={
+     *                      "last_name": "lastname",
+     *                      "first_name": "firstname",
+     *                      "email": "email_x@gmail.com",
+     *                      "phone_number": "55555555",
+     *                      "about": "text about",
+     *                      "my_location": "text location",
+     *                      "latitude": 50.4450105,
+     *                      "longitude": 30.4188569,
+     *                      "whats_app": "http://",
+     *                      "facebook": "http://"
+     *                  }
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="The data",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     @OA\Property(
+     *                         property="name",
+     *                         type="string"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="status",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="code",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="message",
+     *                         type="string"
+     *                     ),
+     *                     example={
+     *                         "name": "Success",
+     *                         "status": 200,
+     *                         "code": 0,
+     *                         "message": "Your profile is updated!"
+     *                     }
+     *                 )
+     *             )
+     *         }
+     *     )
+     * )
+     * @return array
+     * @throws BadRequestHttpException
+     */
+    public function actionUpdate(): array
+    {
+        $userForm = new UserProfileForm();
+        if ($userForm->load(Yii::$app->request->post()) && $userForm->save()) {
+            return $this->successResponse(
+                'Your profile is updated!'
+            );
+        }
+        if ($errors = $userForm->getErrorSummary(true)) {
+            throw new BadRequestHttpException(array_shift($errors));
+        }
+
+        throw new BadRequestHttpException('Undefined error');
     }
 }

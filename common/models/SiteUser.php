@@ -11,18 +11,6 @@ use yii\web\IdentityInterface;
 
 /**
  * User model
- *
- * @property integer $id
- * @property string $username
- * @property string $password_hash
- * @property string $password_reset_token
- * @property string $verification_token
- * @property string $email
- * @property string $auth_key
- * @property integer $status
- * @property integer $created_at
- * @property integer $updated_at
- * @property string $password write-only password
  */
 class SiteUser extends _source_SiteUser implements IdentityInterface
 {
@@ -49,10 +37,13 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
      */
     public function rules()
     {
-        return [
-            ['status', 'default', 'value' => self::STATUS_INACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
-        ];
+        return array_merge(
+            parent::rules(),
+            [
+                ['status', 'default', 'value' => self::STATUS_INACTIVE],
+                ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
+            ]
+        );
     }
 
     public function fields(): array
