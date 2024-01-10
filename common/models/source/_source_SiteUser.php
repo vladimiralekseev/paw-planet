@@ -26,8 +26,12 @@ use Yii;
  * @property float|null $longitude
  * @property string|null $whats_app
  * @property string|null $facebook
+ * @property int|null $img_id
+ * @property int|null $small_img_id
  *
+ * @property Files $img
  * @property SiteUserToken[] $siteUserTokens
+ * @property Files $smallImg
  */
 class _source_SiteUser extends \yii\db\ActiveRecord
 {
@@ -46,7 +50,7 @@ class _source_SiteUser extends \yii\db\ActiveRecord
     {
         return [
             [['username', 'first_name', 'auth_key', 'password_hash', 'email', 'created_at', 'updated_at'], 'required'],
-            [['status'], 'integer'],
+            [['status', 'img_id', 'small_img_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['about', 'my_location'], 'string'],
             [['latitude', 'longitude'], 'number'],
@@ -58,6 +62,8 @@ class _source_SiteUser extends \yii\db\ActiveRecord
             [['username'], 'unique'],
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
+            [['img_id'], 'exist', 'skipOnError' => true, 'targetClass' => Files::class, 'targetAttribute' => ['img_id' => 'id']],
+            [['small_img_id'], 'exist', 'skipOnError' => true, 'targetClass' => Files::class, 'targetAttribute' => ['small_img_id' => 'id']],
         ];
     }
 
@@ -86,7 +92,19 @@ class _source_SiteUser extends \yii\db\ActiveRecord
             'longitude' => 'Longitude',
             'whats_app' => 'Whats App',
             'facebook' => 'Facebook',
+            'img_id' => 'Img ID',
+            'small_img_id' => 'Small Img ID',
         ];
+    }
+
+    /**
+     * Gets query for [[Img]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getImg()
+    {
+        return $this->hasOne(Files::class, ['id' => 'img_id']);
     }
 
     /**
@@ -97,5 +115,15 @@ class _source_SiteUser extends \yii\db\ActiveRecord
     public function getSiteUserTokens()
     {
         return $this->hasMany(SiteUserToken::class, ['site_user_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[SmallImg]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSmallImg()
+    {
+        return $this->hasOne(Files::class, ['id' => 'small_img_id']);
     }
 }

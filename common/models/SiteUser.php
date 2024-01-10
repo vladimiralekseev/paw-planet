@@ -64,6 +64,12 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
             'status_name' => static function($model) {
                 return self::getStatusValue($model->status);
             },
+            'img' => static function($model) {
+                return $model->img->url;
+            },
+            'small_img' => static function($model) {
+                return $model->smallImg->url;
+            },
             'updated_at',
             'created_at',
         ];
