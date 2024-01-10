@@ -3,7 +3,6 @@
 namespace common\models;
 
 use Yii;
-use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
@@ -65,10 +64,10 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
                 return self::getStatusValue($model->status);
             },
             'img' => static function($model) {
-                return $model->img->url;
+                return $model->img ? $model->img->url : null;
             },
             'small_img' => static function($model) {
-                return $model->smallImg->url;
+                return $model->smallImg ? $model->smallImg->url : null;
             },
             'updated_at',
             'created_at',
@@ -96,7 +95,6 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        var_dump(111);exit();
         return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
     }
 
@@ -111,8 +109,6 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
                 'status' => self::STATUS_ACTIVE
             ]
         )->joinWith('siteUserTokens')->one();
-//        var_dump(111);exit();
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
     }
 
     /**

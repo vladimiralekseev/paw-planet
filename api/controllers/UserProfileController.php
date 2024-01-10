@@ -26,6 +26,7 @@ class UserProfileController extends AccessController
                         'index' => ['get'],
                         'update' => ['post'],
                         'avatar' => ['post'],
+                        'avatar-delete' => ['delete'],
                     ],
                 ],
             ]
@@ -295,5 +296,71 @@ class UserProfileController extends AccessController
         }
 
         throw new BadRequestHttpException('Undefined error');
+    }
+
+    /**
+     * @OA\Delete(
+     *     path="/user-profile/avatar-delete/",
+     *     security={{"bearerAuth":{}}},
+     *     tags={"User"},
+     *     @OA\SecurityScheme(
+     *          securityScheme="bearerAuth",
+     *          in="header",
+     *          name="bearerAuth",
+     *          type="http",
+     *          scheme="bearer",
+     *          bearerFormat="JWT",
+     *      ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="The data",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     @OA\Property(
+     *                         property="name",
+     *                         type="string"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="status",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="code",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="message",
+     *                         type="string"
+     *                     ),
+     *                     example={
+     *                         "name": "Success",
+     *                         "status": 200,
+     *                         "code": 0,
+     *                         "message": "Image is updated!"
+     *                     }
+     *                 )
+     *             )
+     *         }
+     *     )
+     * )
+     * @return array
+     * @throws StaleObjectException
+     * @throws Throwable
+     */
+    public function actionAvatarDelete(): array
+    {
+        /** @var SiteUser $user */
+        $user = Yii::$app->user->identity;
+        if ($user->img_id) {
+            $user->img->delete();
+        }
+        if ($user->small_img_id) {
+            $user->smallImg->delete();
+        }
+        return $this->successResponse(
+            'Image is deleted!'
+        );
     }
 }

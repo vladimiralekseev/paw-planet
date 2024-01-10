@@ -92,7 +92,6 @@ return [
 //                ]
                 '/'      => 'site/index',
                 '/logout' => 'site/logout',
-                '/test' => 'site/test',
             ],
         ],
     ],
