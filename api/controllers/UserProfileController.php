@@ -102,13 +102,14 @@ class UserProfileController extends AccessController
      *         @OA\MediaType(
      *             mediaType="application/json",
      *             @OA\Schema(
+     *                 required={"first_name", "email"},
      *                 @OA\Property(
      *                     property="last_name",
      *                     type="string",
      *                     maxLength=128,
      *                 ),
      *                 @OA\Property(
-     *                     property="firstname",
+     *                     property="first_name",
      *                     type="string",
      *                     maxLength=128,
      *                 ),
