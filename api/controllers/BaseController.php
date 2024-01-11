@@ -22,7 +22,7 @@ class BaseController extends Controller
         return $behaviors;
     }
 
-    public function successResponse($message = null, $data = null): array
+    public function successResponse($message = null, $data = null, $dataName = 'data'): array
     {
         $result = [
             'name' => 'Success',
@@ -33,7 +33,7 @@ class BaseController extends Controller
             $result['message'] = $message;
         }
         if ($data) {
-            $result['data'] = $data;
+            $result[$dataName] = $data;
         }
         return $result;
     }

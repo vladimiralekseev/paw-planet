@@ -92,6 +92,7 @@ return [
 //                ]
                 '/'      => 'site/index',
                 '/logout' => 'site/logout',
+                '/pet/update/<id:[\d]+>/' => 'pet/update',
             ],
         ],
     ],

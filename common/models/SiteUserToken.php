@@ -33,7 +33,7 @@ class SiteUserToken extends _source_SiteUserToken
         ];
     }
 
-    public static function generate($user)
+    public static function generate($user): SiteUserToken
     {
         self::deleteAll(['<', 'expired_at', (new DateTime())->format('Y-m-d h:i:s')]);
         $token = new self(
@@ -44,6 +44,8 @@ class SiteUserToken extends _source_SiteUserToken
             ]
         );
         $token->save();
-        return self::find()->where(['id' => $token->id])->one(); // need to fix this because "created_at"
+        /** @var SiteUserToken $token */
+        $token = self::find()->where(['id' => $token->id])->one(); // need to fix this because "created_at"
+        return $token;
     }
 }
