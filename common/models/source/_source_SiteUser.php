@@ -28,6 +28,10 @@ use Yii;
  * @property string|null $facebook
  * @property int|null $img_id
  * @property int|null $small_img_id
+ * @property string|null $country
+ * @property string|null $state
+ * @property string|null $city
+ * @property string|null $address
  *
  * @property Files $img
  * @property SiteUserToken[] $siteUserTokens
@@ -55,9 +59,9 @@ class _source_SiteUser extends \yii\db\ActiveRecord
             [['about', 'my_location'], 'string'],
             [['latitude', 'longitude'], 'number'],
             [['username', 'password_hash', 'password_reset_token', 'email', 'verification_token'], 'string', 'max' => 255],
-            [['first_name', 'last_name'], 'string', 'max' => 128],
+            [['first_name', 'last_name', 'address'], 'string', 'max' => 128],
             [['auth_key'], 'string', 'max' => 32],
-            [['phone_number'], 'string', 'max' => 64],
+            [['phone_number', 'country', 'state', 'city'], 'string', 'max' => 64],
             [['whats_app', 'facebook'], 'string', 'max' => 256],
             [['username'], 'unique'],
             [['email'], 'unique'],
@@ -94,6 +98,10 @@ class _source_SiteUser extends \yii\db\ActiveRecord
             'facebook' => 'Facebook',
             'img_id' => 'Img ID',
             'small_img_id' => 'Small Img ID',
+            'country' => 'Country',
+            'state' => 'State',
+            'city' => 'City',
+            'address' => 'Address',
         ];
     }
 

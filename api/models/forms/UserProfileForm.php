@@ -18,6 +18,10 @@ class UserProfileForm extends Model
     public $longitude;
     public $whats_app;
     public $facebook;
+    public $country;
+    public $state;
+    public $city;
+    public $address;
 
     public function formName(): string
     {
@@ -34,8 +38,8 @@ class UserProfileForm extends Model
             [['about', 'my_location'], 'string'],
             [['latitude', 'longitude'], 'number'],
             [['email'], 'string', 'max' => 255],
-            [['first_name', 'last_name'], 'string', 'max' => 128],
-            [['phone_number'], 'string', 'max' => 64],
+            [['first_name', 'last_name', 'address'], 'string', 'max' => 128],
+            [['phone_number', 'country', 'state', 'city'], 'string', 'max' => 64],
             [['whats_app', 'facebook'], 'string', 'max' => 256],
             [
                 ['email'],
@@ -64,11 +68,15 @@ class UserProfileForm extends Model
         $user->email = $this->email;
         $user->about = $this->about;
         $user->my_location = $this->my_location;
-        $user->latitude = $this->latitude;
-        $user->longitude = $this->longitude;
         $user->phone_number = $this->phone_number;
         $user->whats_app = $this->whats_app;
         $user->facebook = $this->facebook;
+        $user->latitude = $this->latitude;
+        $user->longitude = $this->longitude;
+        $user->country = $this->country;
+        $user->state = $this->state;
+        $user->city = $this->city;
+        $user->address = $this->address;
 
         if ($user->validate() && $r = $user->save()) {
             return true;
