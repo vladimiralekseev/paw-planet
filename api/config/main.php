@@ -80,9 +80,9 @@ return [
         ],
         'urlManager' => [
             'enablePrettyUrl' => true,
-            'showScriptName' => false,
+            'showScriptName'  => false,
             'suffix'          => '/',
-            'rules' => [
+            'rules'           => [
 //                [
 //                    'class' => 'yii\rest\UrlRule',
 //                    'controller' => ['v1/country','v1/user','v1/site'],
@@ -90,9 +90,10 @@ return [
 //                        '{id}' => ''
 //                    ]
 //                ]
-                '/'      => 'site/index',
-                '/logout' => 'site/logout',
+                '/'                       => 'site/index',
+                '/logout'                 => 'site/logout',
                 '/pet/update/<id:[\d]+>/' => 'pet/update',
+                '/pet/breeds/'            => 'breed/index',
             ],
         ],
     ],
