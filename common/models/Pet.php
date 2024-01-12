@@ -21,4 +21,34 @@ class Pet extends _source_Pet
             ],
         ];
     }
+
+    public function fields(): array
+    {
+        $arr = array_merge(
+            parent::fields(),
+            [
+                'breed' => static function($model) {
+                    return $model->breed;
+                },
+                'for_borrow' => static function($model) {
+                    return (bool)$model->for_borrow;
+                },
+                'for_walk' => static function($model) {
+                    return (bool)$model->for_walk;
+                },
+                'img' => static function($model) {
+                    return $model->img ? $model->img->url : null;
+                },
+                'small_img' => static function($model) {
+                    return $model->smallImg ? $model->smallImg->url : null;
+                },
+                'middle_img' => static function($model) {
+                    return $model->middleImg ? $model->middleImg->url : null;
+                },
+                'user',
+            ]
+        );
+        unset($arr['breed_id'], $arr['user_id'], $arr['img_id'], $arr['middle_img_id'], $arr['small_img_id']);
+        return $arr;
+    }
 }

@@ -25,6 +25,7 @@ use Yii;
  *
  * @property Breed $breed
  * @property Files $img
+ * @property Files $middleImg
  * @property PetAvailable[] $petAvailables
  * @property PetImages[] $petImages
  * @property Files $smallImg
@@ -53,6 +54,7 @@ class _source_Pet extends \yii\db\ActiveRecord
             [['description', 'needs', 'good_with'], 'string', 'max' => 1024],
             [['breed_id'], 'exist', 'skipOnError' => true, 'targetClass' => Breed::class, 'targetAttribute' => ['breed_id' => 'id']],
             [['img_id'], 'exist', 'skipOnError' => true, 'targetClass' => Files::class, 'targetAttribute' => ['img_id' => 'id']],
+            [['middle_img_id'], 'exist', 'skipOnError' => true, 'targetClass' => Files::class, 'targetAttribute' => ['middle_img_id' => 'id']],
             [['small_img_id'], 'exist', 'skipOnError' => true, 'targetClass' => Files::class, 'targetAttribute' => ['small_img_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => SiteUser::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
@@ -100,6 +102,16 @@ class _source_Pet extends \yii\db\ActiveRecord
     public function getImg()
     {
         return $this->hasOne(Files::class, ['id' => 'img_id']);
+    }
+
+    /**
+     * Gets query for [[MiddleImg]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMiddleImg()
+    {
+        return $this->hasOne(Files::class, ['id' => 'middle_img_id']);
     }
 
     /**

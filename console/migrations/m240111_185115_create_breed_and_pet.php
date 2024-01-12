@@ -104,6 +104,20 @@ class m240111_185115_create_breed_and_pet extends Migration
             'SET NULL',
             'SET NULL'
         );
+        $this->createIndex(
+            'idx-pet-middle_img_id',
+            'pet',
+            'middle_img_id'
+        );
+        $this->addForeignKey(
+            'fk-pet-middle_img_id',
+            'pet',
+            'middle_img_id',
+            'files',
+            'id',
+            'SET NULL',
+            'SET NULL'
+        );
     }
 
     /**
