@@ -82,7 +82,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName'  => false,
             'suffix'          => '/',
-            'rules'           => [
+            'rules' => [
 //                [
 //                    'class' => 'yii\rest\UrlRule',
 //                    'controller' => ['v1/country','v1/user','v1/site'],
@@ -93,6 +93,7 @@ return [
                 '/'                                             => 'site/index',
                 '/logout'                                       => 'site/logout',
                 '/pet/update/<id:[\d]+>/'                       => 'pet/update',
+                '/pet/list/'                                    => 'pet-list/list',
                 '/pet-images/list/<pet_id:[\d]+>/'              => 'pet-images-list/list',
                 '/pet-images/delete/<pet_image_id:[\d]+>/'      => 'pet-images/delete',
                 '/pet-images/set-as-main/<pet_image_id:[\d]+>/' => 'pet-images/set-as-main',

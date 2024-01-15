@@ -72,6 +72,7 @@ class PetController extends AccessController
      *                     type="integer",
      *                 ),
      *                 @OA\Property(
+     *                     description="Months count",
      *                     property="age",
      *                     type="integer",
      *                 ),
