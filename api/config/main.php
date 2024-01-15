@@ -90,10 +90,13 @@ return [
 //                        '{id}' => ''
 //                    ]
 //                ]
-                '/'                       => 'site/index',
-                '/logout'                 => 'site/logout',
-                '/pet/update/<id:[\d]+>/' => 'pet/update',
-                '/pet/breeds/'            => 'breed/index',
+                '/'                                             => 'site/index',
+                '/logout'                                       => 'site/logout',
+                '/pet/update/<id:[\d]+>/'                       => 'pet/update',
+                '/pet-images/list/<pet_id:[\d]+>/'              => 'pet-images-list/list',
+                '/pet-images/delete/<pet_image_id:[\d]+>/'      => 'pet-images/delete',
+                '/pet-images/set-as-main/<pet_image_id:[\d]+>/' => 'pet-images/set-as-main',
+                '/pet/breeds/'                                  => 'breed/index',
             ],
         ],
     ],

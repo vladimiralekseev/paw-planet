@@ -33,6 +33,27 @@ return [
                         ['crop', 'width' => 60, 'height' => 60, 'x' => 'center - 95', 'y' => 'center - 105'],
                     ],
                 ],
+                'petImage' => [
+                    'process' => [
+                        ['autorotate'],
+                        ['resize', 'width' => 400, 'height' => 450, 'scaleTo' => 'cover'],
+                        ['crop', 'width' => 400, 'height' => 450, 'x' => 'center - 200', 'y' => 'center - 225'],
+                    ],
+                ],
+                'petImageMiddle' => [
+                    'process' => [
+                        ['autorotate'],
+                        ['resize', 'width' => 160, 'height' => 160, 'scaleTo' => 'cover'],
+                        ['crop', 'width' => 160, 'height' => 160, 'x' => 'center - 80', 'y' => 'center - 80'],
+                    ],
+                ],
+                'petImageSmall' => [
+                    'process' => [
+                        ['autorotate'],
+                        ['resize', 'width' => 80, 'height' => 80, 'scaleTo' => 'cover'],
+                        ['crop', 'width' => 80, 'height' => 80, 'x' => 'center - 40', 'y' => 'center - 40'],
+                    ],
+                ],
             ],
         ],
     ],
