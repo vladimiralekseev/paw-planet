@@ -133,6 +133,6 @@ class CrudController extends BaseController
             return $model;
         }
 
-        throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
+        throw new NotFoundHttpException('Page not found.');
     }
 }

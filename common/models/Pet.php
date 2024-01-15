@@ -45,7 +45,9 @@ class Pet extends _source_Pet
                 'middle_img' => static function($model) {
                     return $model->middleImg ? $model->middleImg->url : null;
                 },
-                'user',
+                'user' => static function($model) {
+                    return SiteUserPublic::find()->where(['id' => $model->user_id])->one();
+                },
             ]
         );
         unset($arr['breed_id'], $arr['user_id'], $arr['img_id'], $arr['middle_img_id'], $arr['small_img_id']);

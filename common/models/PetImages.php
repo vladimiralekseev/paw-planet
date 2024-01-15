@@ -37,6 +37,9 @@ class PetImages extends _source_PetImages
                 'middle_img' => static function($model) {
                     return $model->middleImg ? $model->middleImg->url : null;
                 },
+                'is_main' => static function($model) {
+                    return $model->pet->img_id === $model->img_id;
+                }
             ]
         );
         unset($arr['img_id'], $arr['middle_img_id'], $arr['small_img_id']);

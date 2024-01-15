@@ -50,7 +50,7 @@ class PetImagesListController extends BaseController
         /** @var Pet $pet */
         $pet = Pet::find()->where(['id' => $pet_id])->one();
         if (!$pet) {
-            throw new NotFoundHttpException('Page not found.');
+            throw new NotFoundHttpException('Pet not found.');
         }
         return $pet->petImages;
     }

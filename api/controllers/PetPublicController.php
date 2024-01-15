@@ -3,12 +3,14 @@
 namespace api\controllers;
 
 use api\models\forms\PetListForm;
+use common\models\PetDetail;
 use Yii;
 use yii\data\Pagination;
 use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
+use yii\web\NotFoundHttpException;
 
-class PetListController extends BaseController
+class PetPublicController extends BaseController
 {
     public function behaviors(): array
     {
@@ -18,7 +20,8 @@ class PetListController extends BaseController
                 'verbs' => [
                     'class'   => VerbFilter::class,
                     'actions' => [
-                        'list' => ['get'],
+                        'list'   => ['get'],
+                        'detail' => ['get'],
                     ],
                 ],
             ]
@@ -143,5 +146,52 @@ class PetListController extends BaseController
         }
 
         throw new BadRequestHttpException('Undefined error');
+    }
+
+    /**
+     * Pet details
+     *
+     * @OA\Get(
+     *     path="/pet/detail/{id}/",
+     *     tags={"Pet"},
+     *     @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer",
+     *          ),
+     *          style="form"
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Breed list",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     example={
+     *                         "id": 1,
+     *                         "nickname": "nickname",
+     *                      }
+     *                 )
+     *             )
+     *         }
+     *     )
+     * )
+     *
+     * @param $id
+     *
+     * @return array
+     * @throws NotFoundHttpException
+     */
+    public function actionDetail($id)
+    {
+        $pet = PetDetail::find()->where(['id' => $id])->one();
+
+        if (!$pet) {
+            throw new NotFoundHttpException('Pet not found.');
+        }
+
+        return $pet;
     }
 }
