@@ -224,7 +224,7 @@ class PetController extends AccessController
      * Update a pet
      *
      * @OA\Put(
-     *     path="/pet/update/{id}/",
+     *     path="/pet/{id}/update/",
      *     security={{"bearerAuth":{}}},
      *     tags={"Pet"},
      *     @OA\Parameter(

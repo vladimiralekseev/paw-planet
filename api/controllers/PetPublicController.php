@@ -152,7 +152,7 @@ class PetPublicController extends BaseController
      * Pet details
      *
      * @OA\Get(
-     *     path="/pet/detail/{id}/",
+     *     path="/pet/{id}/detail/",
      *     tags={"Pet"},
      *     @OA\Parameter(
      *          name="id",

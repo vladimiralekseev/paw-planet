@@ -33,7 +33,7 @@ class PetForm extends Model
     {
         return [
             [['nickname', 'breed_id'], 'required'],
-            [['breed_id', 'age', 'pet_id'], 'integer'],
+            [['breed_id', 'age'], 'integer'],
             [['nickname'], 'string', 'max' => 128],
             [['description', 'needs', 'good_with'], 'string', 'max' => 1024],
             [['available'], 'checkAvailable'],
@@ -59,7 +59,7 @@ class PetForm extends Model
         if ($this->pet_id) {
             $pet = Pet::find()->where(['id' => $this->pet_id, 'user_id' => Yii::$app->user->identity->id])->one();
             if (!$pet) {
-                $this->addError('pet_id', 'Pet Id is invalid');
+                $this->addError('pet_id', 'Pet Id is not yours');
                 return false;
             }
         } else {
