@@ -5,6 +5,7 @@ namespace api\controllers;
 use api\models\forms\PetForm;
 use common\models\Pet;
 use Yii;
+use yii\data\Pagination;
 use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
 
@@ -18,13 +19,80 @@ class PetController extends AccessController
                 'verbs' => [
                     'class'   => VerbFilter::class,
                     'actions' => [
-                        'index'  => ['get'],
+                        'list'  => ['get'],
                         'create' => ['post'],
                         'update' => ['put'],
                     ],
                 ],
             ]
         );
+    }
+
+
+
+    /**
+     * My pet list
+     *
+     * @OA\Get(
+     *     path="/my-pet/list/",
+     *     security={{"bearerAuth":{}}},
+     *     tags={"Pet"},
+     *     @OA\SecurityScheme(
+     *          securityScheme="bearerAuth",
+     *          in="header",
+     *          name="bearerAuth",
+     *          type="http",
+     *          scheme="bearer",
+     *          bearerFormat="JWT",
+     *      ),
+     *     @OA\Parameter(
+     *          name="page",
+     *          in="query",
+     *          @OA\Schema(
+     *              type="integer",
+     *          ),
+     *          style="form"
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Breed list",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     example={
+     *                          "pagination": {
+     *                              "totalCount": "1"
+     *                           },
+     *                          "pets": {
+     *                              {
+     *                                  "id": 1,
+     *                                  "nickname": "nickname",
+     *                              }
+     *                          }
+     *                      }
+     *                 )
+     *             )
+     *         }
+     *     )
+     * )
+     *
+     * @return array
+     */
+    public function actionList(): array
+    {
+        $query = Pet::find()->where(['user_id' => Yii::$app->user->identity->id]);
+        $itemCount = $query->count();
+        $pagination = new Pagination(['totalCount' => $itemCount, 'pageSize' => 20]);
+
+        return [
+            'pagination' => [
+                'totalCount' => $itemCount,
+                'page'       => $pagination->page + 1,
+                'pageCount'  => $pagination->pageCount,
+            ],
+            'pets'       => $query->offset($pagination->offset)->limit($pagination->limit)->all()
+        ];
     }
 
     /**
