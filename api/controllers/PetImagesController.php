@@ -141,8 +141,8 @@ class PetImagesController extends AccessController
      *     @OA\Parameter(
      *          name="pet_image_id",
      *          in="path",
+     *          required=true,
      *          @OA\Schema(
-     *              required={"pet_image_id"},
      *              type="integer",
      *          ),
      *          style="form"

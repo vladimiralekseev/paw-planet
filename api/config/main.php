@@ -94,6 +94,8 @@ return [
                 '/logout'                                       => 'site/logout',
                 '/my-pet/list/'                                 => 'pet/list',
                 '/pet/update/<id:[\d]+>/'                       => 'pet/update',
+                '/pet/<id:[\d]+>/walk/<status:[\d]+>/'          => 'pet/update-walk',
+                '/pet/<id:[\d]+>/borrow/<status:[\d]+>/'        => 'pet/update-borrow',
                 '/pet/list/'                                    => 'pet-public/list',
                 '/pet/detail/<id:[\d]+>/'                       => 'pet-public/detail',
                 '/pet-images/list/<pet_id:[\d]+>/'              => 'pet-images-list/list',

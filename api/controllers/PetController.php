@@ -3,6 +3,7 @@
 namespace api\controllers;
 
 use api\models\forms\PetForm;
+use api\models\forms\PetUpdateFieldForm;
 use common\models\Pet;
 use Yii;
 use yii\data\Pagination;
@@ -19,15 +20,16 @@ class PetController extends AccessController
                 'verbs' => [
                     'class'   => VerbFilter::class,
                     'actions' => [
-                        'list'  => ['get'],
-                        'create' => ['post'],
-                        'update' => ['put'],
+                        'list'          => ['get'],
+                        'create'        => ['post'],
+                        'update'        => ['put'],
+                        'update-walk'   => ['patch'],
+                        'update-borrow' => ['patch'],
                     ],
                 ],
             ]
         );
     }
-
 
 
     /**
@@ -55,7 +57,7 @@ class PetController extends AccessController
      *     ),
      *     @OA\Response(
      *         response="200",
-     *         description="Breed list",
+     *         description="Response",
      *         content={
      *             @OA\MediaType(
      *                 mediaType="application/json",
@@ -342,6 +344,202 @@ class PetController extends AccessController
             );
         }
         if ($errors = $petForm->getErrorSummary(true)) {
+            throw new BadRequestHttpException(array_shift($errors));
+        }
+
+        throw new BadRequestHttpException('Undefined error');
+    }
+
+    /**
+     * Update a pet walk status
+     *
+     * @OA\Patch(
+     *     path="/pet/{id}/walk/{status}/",
+     *     security={{"bearerAuth":{}}},
+     *     tags={"Pet"},
+     *     @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="integer",
+     *          ),
+     *          style="form"
+     *     ),
+     *     @OA\Parameter(
+     *          description="Status (0 or 1)",
+     *          name="status",
+     *          in="path",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="integer",
+     *          ),
+     *          style="form"
+     *     ),
+     *     @OA\SecurityScheme(
+     *          securityScheme="bearerAuth",
+     *          in="header",
+     *          name="bearerAuth",
+     *          type="http",
+     *          scheme="bearer",
+     *          bearerFormat="JWT",
+     *      ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Response",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     @OA\Property(
+     *                         property="name",
+     *                         type="string"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="status",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="code",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="message",
+     *                         type="string"
+     *                     ),
+     *                     example={
+     *                         "name": "Success",
+     *                         "status": 200,
+     *                         "code": 0,
+     *                         "message": "Updated!",
+     *                         "pet": {
+     *                              "id": 1,
+     *                          },
+     *                     }
+     *                 )
+     *             )
+     *         }
+     *     )
+     * )
+     * @param $id
+     * @param $status
+     *
+     * @return array
+     * @throws BadRequestHttpException
+     */
+    public function actionUpdateWalk($id, $status): array
+    {
+        $petWalkForm = new PetUpdateFieldForm(
+            [
+                'pet_id' => $id,
+                'status' => $status,
+                'field'  => PetUpdateFieldForm::FIELD_WALK
+            ]
+        );
+        if ($petWalkForm->save()) {
+            return $this->successResponse(
+                'Pet is updated!'
+            );
+        }
+        if ($errors = $petWalkForm->getErrorSummary(true)) {
+            throw new BadRequestHttpException(array_shift($errors));
+        }
+
+        throw new BadRequestHttpException('Undefined error');
+    }
+
+    /**
+     * Update a pet borrow status
+     *
+     * @OA\Patch(
+     *     path="/pet/{id}/borrow/{status}/",
+     *     security={{"bearerAuth":{}}},
+     *     tags={"Pet"},
+     *     @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="integer",
+     *          ),
+     *          style="form"
+     *     ),
+     *     @OA\Parameter(
+     *          description="Status (0 or 1)",
+     *          name="status",
+     *          in="path",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="integer",
+     *          ),
+     *          style="form"
+     *     ),
+     *     @OA\SecurityScheme(
+     *          securityScheme="bearerAuth",
+     *          in="header",
+     *          name="bearerAuth",
+     *          type="http",
+     *          scheme="bearer",
+     *          bearerFormat="JWT",
+     *      ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Response",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     @OA\Property(
+     *                         property="name",
+     *                         type="string"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="status",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="code",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="message",
+     *                         type="string"
+     *                     ),
+     *                     example={
+     *                         "name": "Success",
+     *                         "status": 200,
+     *                         "code": 0,
+     *                         "message": "Updated!",
+     *                         "pet": {
+     *                              "id": 1,
+     *                          },
+     *                     }
+     *                 )
+     *             )
+     *         }
+     *     )
+     * )
+     * @param $id
+     * @param $status
+     *
+     * @return array
+     * @throws BadRequestHttpException
+     */
+    public function actionUpdateBorrow($id, $status): array
+    {
+        $petWalkForm = new PetUpdateFieldForm(
+            [
+                'pet_id' => $id,
+                'status' => $status,
+                'field'  => PetUpdateFieldForm::FIELD_BORROW
+            ]
+        );
+        if ($petWalkForm->save()) {
+            return $this->successResponse(
+                'Pet is updated!'
+            );
+        }
+        if ($errors = $petWalkForm->getErrorSummary(true)) {
             throw new BadRequestHttpException(array_shift($errors));
         }
 
