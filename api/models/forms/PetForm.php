@@ -3,6 +3,7 @@
 namespace api\models\forms;
 
 use common\models\Pet;
+use common\models\PetAvailable;
 use Yii;
 use yii\base\Model;
 
@@ -18,6 +19,7 @@ class PetForm extends Model
     public $age;
     public $breed_id;
     public $pet_id;
+    public $available;
 
     public function formName(): string
     {
@@ -34,7 +36,17 @@ class PetForm extends Model
             [['breed_id', 'age', 'pet_id'], 'integer'],
             [['nickname'], 'string', 'max' => 128],
             [['description', 'needs', 'good_with'], 'string', 'max' => 1024],
+            [['available'], 'checkAvailable'],
         ];
+    }
+
+    public function checkAvailable(): void
+    {
+        foreach (explode(',', $this->available) as $day) {
+            if (!in_array($day, [1, 2, 3, 4, 5, 6, 7], false)) {
+                $this->addError('available', 'Available is invalid: \'' . $day . '\'');
+            }
+        }
     }
 
     public function save(): bool
@@ -63,6 +75,17 @@ class PetForm extends Model
 
         if ($pet->validate() && $r = $pet->save()) {
             $this->pet_id = $pet->id;
+            PetAvailable::deleteAll(['pet_id' => $pet->id]);
+            foreach (explode(',', $this->available) as $day) {
+                $petAvailable = new PetAvailable(
+                    [
+                        'pet_id' => $pet->id,
+                        'day' => $day,
+                        'available' => 1,
+                    ]
+                );
+                $petAvailable->save();
+            }
             return true;
         }
         $this->addErrors($pet->getErrors());

@@ -76,6 +76,11 @@ class PetController extends AccessController
      *                     property="age",
      *                     type="integer",
      *                 ),
+     *                 @OA\Property(
+     *                     description="Days of week, example: 1,3,6",
+     *                     property="available",
+     *                     type="integer",
+     *                 ),
      *                 example={
      *                      "nickname": "nickname",
      *                      "description": "description",
@@ -83,6 +88,7 @@ class PetController extends AccessController
      *                      "good_with": "good_with",
      *                      "breed_id": 1,
      *                      "age": 2,
+     *                      "available": "1,3,7",
      *                  }
      *             )
      *         )
@@ -200,6 +206,11 @@ class PetController extends AccessController
      *                     property="age",
      *                     type="integer",
      *                 ),
+     *                 @OA\Property(
+     *                     description="Days of week, example: 1,3,6",
+     *                     property="available",
+     *                     type="integer",
+     *                 ),
      *                 example={
      *                      "nickname": "nickname",
      *                      "description": "description",
@@ -207,6 +218,7 @@ class PetController extends AccessController
      *                      "good_with": "good_with",
      *                      "breed_id": 1,
      *                      "age": 2,
+     *                      "available": "1,3,7",
      *                  }
      *             )
      *         )
