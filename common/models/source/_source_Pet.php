@@ -30,6 +30,7 @@ use Yii;
  * @property PetImages[] $petImages
  * @property Files $smallImg
  * @property SiteUser $user
+ * @property UserRequestPet[] $userRequestPets
  */
 class _source_Pet extends \yii\db\ActiveRecord
 {
@@ -152,5 +153,15 @@ class _source_Pet extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(SiteUser::class, ['id' => 'user_id']);
+    }
+
+    /**
+     * Gets query for [[UserRequestPets]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserRequestPets()
+    {
+        return $this->hasMany(UserRequestPet::class, ['pet_id' => 'id']);
     }
 }

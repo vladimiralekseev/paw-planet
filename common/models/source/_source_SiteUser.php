@@ -34,8 +34,10 @@ use Yii;
  * @property string|null $address
  *
  * @property Files $img
+ * @property Pet[] $pets
  * @property SiteUserToken[] $siteUserTokens
  * @property Files $smallImg
+ * @property UserRequestPet[] $userRequestPets
  */
 class _source_SiteUser extends \yii\db\ActiveRecord
 {
@@ -116,6 +118,16 @@ class _source_SiteUser extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Pets]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPets()
+    {
+        return $this->hasMany(Pet::class, ['user_id' => 'id']);
+    }
+
+    /**
      * Gets query for [[SiteUserTokens]].
      *
      * @return \yii\db\ActiveQuery
@@ -133,5 +145,15 @@ class _source_SiteUser extends \yii\db\ActiveRecord
     public function getSmallImg()
     {
         return $this->hasOne(Files::class, ['id' => 'small_img_id']);
+    }
+
+    /**
+     * Gets query for [[UserRequestPets]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserRequestPets()
+    {
+        return $this->hasMany(UserRequestPet::class, ['request_owner_id' => 'id']);
     }
 }

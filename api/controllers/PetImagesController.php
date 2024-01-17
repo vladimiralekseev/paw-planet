@@ -21,10 +21,11 @@ class PetImagesController extends AccessController
                 'verbs' => [
                     'class'   => VerbFilter::class,
                     'actions' => [
-                        'list'   => ['get'],
-                        'upload' => ['post'],
-                        'update' => ['put'],
+                        'list'        => ['get'],
+                        'upload'      => ['post'],
+                        'update'      => ['put'],
                         'set-as-main' => ['patch'],
+                        'delete'      => ['delete'],
                     ],
                 ],
             ]
