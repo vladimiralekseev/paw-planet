@@ -2,13 +2,10 @@
 
 namespace api\controllers;
 
-use api\models\forms\PetForm;
-use api\models\forms\PetUpdateFieldForm;
 use api\models\forms\UserRequestPetForm;
-use common\models\Pet;
+use api\models\forms\UserRequestPetStatusForm;
 use common\models\UserRequestPet;
 use Yii;
-use yii\data\Pagination;
 use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
 
@@ -22,10 +19,10 @@ class RequestController extends AccessController
                 'verbs' => [
                     'class'   => VerbFilter::class,
                     'actions' => [
-                        'to-me'  => ['get'],
+                        'to-me'   => ['get'],
                         'from-me' => ['get'],
-                        'create' => ['post'],
-                        'status' => ['patch'],
+                        'create'  => ['post'],
+                        'status'  => ['patch'],
                     ],
                 ],
             ]
@@ -75,9 +72,13 @@ class RequestController extends AccessController
                 'user_id' => Yii::$app->user->identity->id,
             ]
         )
-            ->innerJoinWith(['pet' => static function($query) {
-                $query->innerJoinWith(['user'])->with(['img', 'smallImg', 'middleImg', 'breed']);
-            }])
+            ->innerJoinWith(
+                [
+                    'pet' => static function ($query) {
+                        $query->innerJoinWith(['user'])->with(['img', 'smallImg', 'middleImg', 'breed']);
+                    }
+                ]
+            )
             ->all();
     }
 
@@ -191,7 +192,7 @@ class RequestController extends AccessController
      *                         "name": "Success",
      *                         "status": 200,
      *                         "code": 0,
-     *                         "message": "Request is created!",
+     *                         "message": "Request has created!",
      *                     }
      *                 )
      *             )
@@ -210,6 +211,97 @@ class RequestController extends AccessController
             );
         }
         if ($errors = $userRequestPetForm->getErrorSummary(true)) {
+            throw new BadRequestHttpException(array_shift($errors));
+        }
+
+        throw new BadRequestHttpException('Undefined error');
+    }
+
+    /**
+     * Change a request status
+     *
+     * @OA\Patch(
+     *     path="/request/{id}/status/{status}/",
+     *     security={{"bearerAuth":{}}},
+     *     tags={"Requests"},
+     *     @OA\SecurityScheme(
+     *          securityScheme="bearerAuth",
+     *          in="header",
+     *          name="bearerAuth",
+     *          type="http",
+     *          scheme="bearer",
+     *          bearerFormat="JWT",
+     *      ),
+     *     @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="integer",
+     *          ),
+     *          style="form"
+     *     ),
+     *     @OA\Parameter(
+     *          description="Status (approved, rejected, canceled)",
+     *          name="status",
+     *          in="path",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="string",
+     *          ),
+     *          style="form"
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="The data",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     @OA\Property(
+     *                         property="name",
+     *                         type="string"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="status",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="code",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="message",
+     *                         type="string"
+     *                     ),
+     *                     example={
+     *                         "name": "Success",
+     *                         "status": 200,
+     *                         "code": 0,
+     *                         "message": "Request has updated!",
+     *                     }
+     *                 )
+     *             )
+     *         }
+     *     )
+     * )
+     * @param $id
+     * @param $status
+     *
+     * @return array
+     * @throws BadRequestHttpException
+     */
+    public function actionStatus($id, $status): array
+    {
+        $userRequestPetStatusForm = new UserRequestPetStatusForm();
+        $userRequestPetStatusForm->id = $id;
+        $userRequestPetStatusForm->status = $status;
+        if ($userRequestPetStatusForm->save()) {
+            return $this->successResponse(
+                'Request has updated!'
+            );
+        }
+        if ($errors = $userRequestPetStatusForm->getErrorSummary(true)) {
             throw new BadRequestHttpException(array_shift($errors));
         }
 

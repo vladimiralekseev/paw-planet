@@ -102,6 +102,7 @@ return [
                 '/pet-images/delete/<pet_image_id:[\d]+>/'      => 'pet-images/delete',
                 '/pet-images/set-as-main/<pet_image_id:[\d]+>/' => 'pet-images/set-as-main',
                 '/pet/breeds/'                                  => 'breed/index',
+                '/request/<id:[\d]+>/status/<status:[\w]+>/'    => 'request/status',
             ],
         ],
     ],
