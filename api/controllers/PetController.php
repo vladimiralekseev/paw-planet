@@ -31,7 +31,6 @@ class PetController extends AccessController
         );
     }
 
-
     /**
      * My pet list
      *

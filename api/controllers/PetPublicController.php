@@ -43,6 +43,30 @@ class PetPublicController extends BaseController
      *          style="form"
      *     ),
      *     @OA\Parameter(
+     *          name="distance",
+     *          in="query",
+     *          @OA\Schema(
+     *              type="integer",
+     *          ),
+     *          style="form"
+     *     ),
+     *     @OA\Parameter(
+     *          name="lat",
+     *          in="query",
+     *          @OA\Schema(
+     *              type="float",
+     *          ),
+     *          style="form"
+     *     ),
+     *     @OA\Parameter(
+     *          name="lng",
+     *          in="query",
+     *          @OA\Schema(
+     *              type="float",
+     *          ),
+     *          style="form"
+     *     ),
+     *     @OA\Parameter(
      *          description="breed_ids, example: 1,14,22",
      *          @OA\Schema(
      *              type="string",

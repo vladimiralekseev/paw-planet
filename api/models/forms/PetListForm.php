@@ -15,6 +15,9 @@ class PetListForm extends Model
     public $for_borrow;
     public $for_walk;
     public $available;
+    public $distance;
+    public $lat;
+    public $lng;
 
     public function formName(): string
     {
@@ -27,17 +30,43 @@ class PetListForm extends Model
     public function rules(): array
     {
         return [
-            [['age_from', 'age_to', 'for_borrow', 'for_walk'], 'integer'],
+            [['age_from', 'age_to', 'for_borrow', 'for_walk', 'distance'], 'integer'],
             [['breed_ids'], 'string'],
+            [['lat', 'lng'], 'double'],
             ['for_borrow', 'in', 'range' => [0, 1]],
             ['for_walk', 'in', 'range' => [0, 1]],
             ['available', 'in', 'range' => [1, 2, 3, 4, 5, 6, 7]],
+            [['lat', 'lng'], 'required', 'when' => function($model) {
+                return $model->distance;
+            }, 'message' => "Distance requires Lat and Lng options"],
+            [['distance'], 'required', 'when' => function($model) {
+                return $model->lat && $model->lng;
+            }, 'message' => "Lat and Lng options require a distance"],
         ];
     }
 
     public function getQuery(): ActiveQuery
     {
         $query = Pet::find();
+        $query->innerJoinWith(['user']);
+        if (!empty($this->distance) && !empty($this->lat) && !empty($this->lng)) {
+            $query->select(
+                [
+                    Pet::tableName() . '.*',
+                    '( 3959 * acos( cos( radians(' . $this->lat . ') ) * cos( radians( site_user.latitude ) )
+                  * cos( radians(site_user.longitude) - radians(' . $this->lng . ')) + sin(radians(' . $this->lat . '))
+                  * sin( radians(site_user.latitude)))) AS distance'
+                ]
+            );
+            $query->orHaving(['<=', 'distance', $this->distance]);
+        } else {
+            $query->select(
+                [
+                    Pet::tableName() . '.*',
+                    'distance' => "FLOOR(0)"
+                ]
+            );
+        }
         if ($this->breed_ids) {
             $query->andWhere(['breed_id' => explode(',', $this->breed_ids)]);
         }
