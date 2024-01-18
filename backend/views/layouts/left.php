@@ -12,8 +12,8 @@ use yii\widgets\Menu;
         $menu = [
             ['label' => 'Content', 'options' => ['class' => 'header']],
             [
-                'label' => '<span class="fa fa-dashboard"></span> ' . 'Categories',
-                'url'   => ['/categories']
+                'label' => '<span class="fa fa-dashboard"></span> ' . 'Reviews',
+                'url'   => ['/review']
             ],
             ['label' => 'Settings', 'options' => ['class' => 'header']],
             [

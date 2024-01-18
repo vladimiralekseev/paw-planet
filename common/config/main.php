@@ -54,6 +54,20 @@ return [
                         ['crop', 'width' => 80, 'height' => 80, 'x' => 'center - 40', 'y' => 'center - 40'],
                     ],
                 ],
+                'reviewUser' => [
+                    'process' => [
+                        ['autorotate'],
+                        ['resize', 'width' => 80, 'height' => 80, 'scaleTo' => 'cover'],
+                        ['crop', 'width' => 80, 'height' => 80, 'x' => 'center - 40', 'y' => 'center - 40'],
+                    ],
+                ],
+                'reviewPet' => [
+                    'process' => [
+                        ['autorotate'],
+                        ['resize', 'width' => 40, 'height' => 40, 'scaleTo' => 'cover'],
+                        ['crop', 'width' => 40, 'height' => 40, 'x' => 'center - 20', 'y' => 'center - 20'],
+                    ],
+                ],
             ],
         ],
     ],

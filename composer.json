@@ -28,6 +28,7 @@
         "yiisoft/yii2-authclient": "^2.1.8",
         "rmrevin/yii2-minify-view": "^1.15",
         "himiklab/yii2-recaptcha-widget" : "*",
+        "kartik-v/yii2-widget-datetimepicker" : "*",
         "ext-dom": "*",
         "ext-libxml": "*",
         "ext-fileinfo": "*",
