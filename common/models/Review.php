@@ -39,4 +39,21 @@ class Review extends _source_Review
         }
         return parent::beforeDelete();
     }
+
+    public function fields(): array
+    {
+        $arr = array_merge(
+            parent::fields(),
+            [
+                'user_img' => static function ($model) {
+                    return $model->userImg ? $model->userImg->url : null;
+                },
+                'pet_img'  => static function ($model) {
+                    return $model->petImg ? $model->petImg->url : null;
+                },
+            ]
+        );
+        unset($arr['user_img_id'], $arr['pet_img_id']);
+        return $arr;
+    }
 }

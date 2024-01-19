@@ -120,7 +120,7 @@ class PetPublicController extends BaseController
      *     ),
      *     @OA\Response(
      *         response="200",
-     *         description="Breed list",
+     *         description="Pet list",
      *         content={
      *             @OA\MediaType(
      *                 mediaType="application/json",
@@ -188,7 +188,7 @@ class PetPublicController extends BaseController
      *     ),
      *     @OA\Response(
      *         response="200",
-     *         description="Breed list",
+     *         description="Pet details",
      *         content={
      *             @OA\MediaType(
      *                 mediaType="application/json",
