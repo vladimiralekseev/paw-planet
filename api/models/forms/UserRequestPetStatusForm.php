@@ -73,13 +73,47 @@ class UserRequestPetStatusForm extends Model
             return false;
         }
 
-        /** @var UserRequestPet $pet */
+        /** @var UserRequestPet $userRequestPet */
+        /** @var UserRequestPet $userRequestPetOld */
         $userRequestPet = UserRequestPet::find()->where(['id' => $this->id])->one();
+        $userRequestPetOld = clone $userRequestPet;
         $userRequestPet->status = $this->status;
         if ($userRequestPet->validate() && $userRequestPet->save()) {
+            $this->sendEmail($userRequestPetOld, $userRequestPet);
             return true;
         }
         $this->addErrors($userRequestPet->getErrors());
+        return false;
+    }
+
+    private function sendEmail(UserRequestPet $requestOld, UserRequestPet $request): bool
+    {
+        if ($requestOld->status === UserRequestPet::STATUS_NEW && $request->status === UserRequestPet::STATUS_APPROVED) {
+            return Yii::$app
+                ->mailer
+                ->compose(
+                    'request/request-approved',
+                    ['request' => $request]
+                )
+                ->setFrom(Yii::$app->params['emailFrom'])
+                ->setTo($request->requestOwner->email)
+                ->setBcc(Yii::$app->params['emailBcc'])
+                ->setSubject('Request is approved')
+                ->send();
+        }
+        if ($requestOld->status === UserRequestPet::STATUS_NEW && $request->status === UserRequestPet::STATUS_REJECTED) {
+            return Yii::$app
+                ->mailer
+                ->compose(
+                    'request/request-rejected',
+                    ['request' => $request]
+                )
+                ->setFrom(Yii::$app->params['emailFrom'])
+                ->setTo($request->requestOwner->email)
+                ->setBcc(Yii::$app->params['emailBcc'])
+                ->setSubject('Request is rejected')
+                ->send();
+        }
         return false;
     }
 }
