@@ -1,10 +1,8 @@
 <?php
 
-use api\components\CustomErrorHandler;
 use common\models\SiteUser;
 use yii\web\JsonResponseFormatter;
 use yii\web\JsonParser;
-use common\models\User;
 
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
@@ -92,6 +90,7 @@ return [
 //                ]
                 '/'                                             => 'site/index',
                 '/logout'                                       => 'site/logout',
+                '/user-profile/<id:[\d]+>/'                     => 'user-profile/detail',
                 '/my-pet/list/'                                 => 'pet/list',
                 '/pet/<id:[\d]+>/update/'                       => 'pet/update',
                 '/pet/<id:[\d]+>/walk/<status:[\d]+>/'          => 'pet/update-walk',

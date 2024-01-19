@@ -15,22 +15,22 @@ class SiteUserPublic extends SiteUser
 {
     public function fields(): array
     {
+        $petIds = array_map(static function($pet) { return $pet->id; }, $this->pets);
+        $requestAccess = UserRequestPet::find()->where(
+            [
+                'pet_id'           => $petIds,
+                'status'           => UserRequestPet::STATUS_APPROVED,
+                'request_owner_id' => Yii::$app->user->identity->id,
+            ]
+        )->one();
         return [
             'id',
             'last_name',
             'first_name',
-//            'phone_number',
             'about',
-//            'email',
-//            'my_location',
-//            'latitude',
-//            'longitude',
             'country',
             'state',
             'city',
-//            'address',
-//            'whats_app',
-//            'facebook',
             'status',
             'status_name' => static function($model) {
                 return self::getStatusValue($model->status);
@@ -43,6 +43,18 @@ class SiteUserPublic extends SiteUser
             },
             'updated_at',
             'created_at',
+            'security_fields' => static function($model) use ($requestAccess) {
+                return $requestAccess ? [
+                    'phone_number',
+                    'email',
+                    'my_location',
+                    'latitude',
+                    'longitude',
+                    'address',
+                    'whats_app',
+                    'facebook',
+                ] : null;
+            },
         ];
     }
 

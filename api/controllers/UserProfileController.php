@@ -4,14 +4,17 @@ namespace api\controllers;
 
 use api\models\forms\UserProfileForm;
 use common\models\SiteUser;
+use common\models\SiteUserPublic;
 use common\models\upload\ProfilePreviewUploadForm;
 use common\models\upload\ProfileSmallPreviewUploadForm;
+use common\models\UserRequestPet;
 use Throwable;
 use Yii;
 use yii\db\StaleObjectException;
 use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
 use yii\web\IdentityInterface;
+use yii\web\NotFoundHttpException;
 
 class UserProfileController extends AccessController
 {
@@ -23,9 +26,10 @@ class UserProfileController extends AccessController
                 'verbs' => [
                     'class'   => VerbFilter::class,
                     'actions' => [
-                        'index' => ['get'],
-                        'update' => ['post'],
-                        'avatar' => ['post'],
+                        'index'         => ['get'],
+                        'detail'        => ['get'],
+                        'update'        => ['post'],
+                        'avatar'        => ['post'],
                         'avatar-delete' => ['delete'],
                     ],
                 ],
@@ -339,7 +343,7 @@ class UserProfileController extends AccessController
      *          type="http",
      *          scheme="bearer",
      *          bearerFormat="JWT",
-     *      ),
+     *     ),
      *     @OA\Response(
      *         response="200",
      *         description="The data",
@@ -391,5 +395,76 @@ class UserProfileController extends AccessController
         return $this->successResponse(
             'Image is deleted!'
         );
+    }
+
+    /**
+     * User profile detail by id
+     *
+     * @OA\Get(
+     *     path="/user-profile/{id}/",
+     *     security={{"bearerAuth":{}}},
+     *     tags={"User"},
+     *     @OA\SecurityScheme(
+     *          securityScheme="bearerAuth",
+     *          in="header",
+     *          name="bearerAuth",
+     *          type="http",
+     *          scheme="bearer",
+     *          bearerFormat="JWT",
+     *     ),
+     *     @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer",
+     *          ),
+     *          style="form"
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="The user data",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     example={
+     *                     "id": 11,
+     *                     "last_name": "lastname",
+     *                     "first_name": "firstname",
+     *                     "about": null,
+     *                     "country": null,
+     *                     "state": null,
+     *                     "city": null,
+     *                     "status": 10,
+     *                     "status_name": "Active",
+     *                     "updated_at": "2023-12-20 14:42:06",
+     *                     "created_at": "2023-12-20 14:42:06",
+     *                     "security_fields": {
+     *                         "phone_number": "0970000000",
+     *                         "email": "email@email.com",
+     *                         "my_location": "text",
+     *                         "latitude": "50.4450105000000",
+     *                         "longitude": "30.4188569000000",
+     *                         "address": "text",
+     *                         "whats_app": "text",
+     *                         "facebook": "text",
+     *                     }
+     *                     }
+     *                 )
+     *             )
+     *         }
+     *     )
+     * )
+     * @throws NotFoundHttpException
+     */
+    public function actionDetail($id)
+    {
+        /** @var SiteUserPublic $user */
+        $user = SiteUserPublic::find()->where(['id' => $id])->one();
+        if (!$user) {
+            throw new NotFoundHttpException('User not found.');
+        }
+
+        return $user;
     }
 }
