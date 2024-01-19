@@ -79,9 +79,25 @@ class UserRequestPetForm extends Model
         $userRequestPet->type = $this->type;
         $userRequestPet->status = UserRequestPet::STATUS_NEW;
         if ($userRequestPet->validate() && $userRequestPet->save()) {
+            $this->sendEmail($userRequestPet);
             return true;
         }
         $this->addErrors($userRequestPet->getErrors());
         return false;
+    }
+
+    private function sendEmail(UserRequestPet $request): bool
+    {
+        return Yii::$app
+            ->mailer
+            ->compose(
+                'request/request-new',
+                ['request' => $request]
+            )
+            ->setFrom(Yii::$app->params['emailFrom'])
+            ->setTo($request->pet->user->email)
+            ->setBcc(Yii::$app->params['emailBcc'])
+            ->setSubject('New request')
+            ->send();
     }
 }
