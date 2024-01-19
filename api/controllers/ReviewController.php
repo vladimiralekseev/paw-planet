@@ -23,7 +23,7 @@ class ReviewController extends BaseController
     }
 
     /**
-     * Review list
+     * Review list. To manage reviews go to https://admin.paw-planet.gointeractive.com.ua/review/index
      *
      * @OA\Get(
      *     path="/review/list/",
