@@ -1,17 +1,17 @@
 <?php
 
-use common\models\Review;
+use common\models\Color;
 use yii\helpers\Html;
 use yii\web\View;
 use yii\widgets\DetailView;
 
 /**
- * @var View   $this
- * @var Review $model
+ * @var View  $this
+ * @var Color $model
  */
 
-$this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Reviews', 'url' => ['index']];
+$this->title = $model->color;
+$this->params['breadcrumbs'][] = ['label' => 'Colors', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="text-page-view">
@@ -49,30 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'model'      => $model,
                     'attributes' => [
                         'id',
-                        'name',
-                        'short_description',
-                        'description',
-                        [
-                            'attribute' => 'User Image',
-                            'value'     => $model->user_img_id ? Html::img(
-                                $model->userImg->getUrl(),
-                                [
-                                    'style' => 'max-width:300px;',
-                                ]
-                            ) : null,
-                            'format'    => 'html',
-                        ],
-                        [
-                            'label'  => 'Pet Image',
-                            'value'  => $model->pet_img_id ? Html::img(
-                                $model->petImg->getUrl(),
-                                [
-                                    'style' => 'max-width:300px;',
-                                ]
-                            ) : null,
-                            'format' => 'html',
-                        ],
-                        'date',
+                        'color',
                         'created_at',
                         'updated_at',
                     ],

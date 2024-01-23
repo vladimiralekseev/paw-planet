@@ -2,10 +2,10 @@
 
 namespace api\controllers;
 
-use common\models\Breed;
+use common\models\Color;
 use yii\filters\VerbFilter;
 
-class BreedController extends BaseController
+class ColorController extends BaseController
 {
     public function behaviors(): array
     {
@@ -15,7 +15,7 @@ class BreedController extends BaseController
                 'verbs' => [
                     'class'   => VerbFilter::class,
                     'actions' => [
-                        'list' => ['get'],
+                        'list'   => ['get'],
                     ],
                 ],
             ]
@@ -23,32 +23,34 @@ class BreedController extends BaseController
     }
 
     /**
-     * Breed list. To manage breeds go to https://admin.paw-planet.gointeractive.com.ua/breed/index
+     * Colors list. To manage colors go to https://admin.paw-planet.gointeractive.com.ua/color/index
      *
      * @OA\Get(
-     *     path="/breeds/",
-     *     tags={"Breeds"},
+     *     path="/colors/",
+     *     tags={"Colors"},
      *     @OA\Response(
      *         response="200",
-     *         description="Breeds list",
+     *         description="Colors list",
      *         content={
      *             @OA\MediaType(
      *                 mediaType="application/json",
      *                 @OA\Schema(
      *                     example={{
-     *                     "id": 11,
-     *                     "name": "lastname",
-     *                     "updated_at": "2023-12-20 14:42:06",
-     *                     "created_at": "2023-12-20 14:42:06"
-     *                     }}
+     *                          "id": 2,
+     *                          "color": "Black",
+     *                          "created_at": "2024-01-22 15:30:04",
+     *                          "updated_at": "2024-01-22 15:32:16"
+     *                      }}
      *                 )
      *             )
      *         }
      *     )
      * )
+     *
+     * @return array
      */
     public function actionList(): array
     {
-        return Breed::find()->all();
+        return Color::find()->all();
     }
 }
