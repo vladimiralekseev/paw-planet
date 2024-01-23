@@ -92,6 +92,7 @@ return [
                 '/logout'                                       => 'site/logout',
                 '/user-profile/<id:[\d]+>/'                     => 'user-profile/detail',
                 '/my-lost-pet/list/'                            => 'lost-pet/list',
+                '/lost-pet/<id:[\d]+>/update/'                  => 'lost-pet/update',
                 '/my-pet/list/'                                 => 'pet/list',
                 '/pet/<id:[\d]+>/update/'                       => 'pet/update',
                 '/pet/<id:[\d]+>/walk/<status:[\d]+>/'          => 'pet/update-walk',

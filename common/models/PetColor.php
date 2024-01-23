@@ -26,6 +26,9 @@ class PetColor extends _source_PetColor
         $arr = array_merge(
             parent::fields(),
             [
+                'id' => static function(PetColor $model) {
+                    return $model->color->id;
+                },
                 'color' => static function(PetColor $model) {
                     return $model->color->color;
                 },

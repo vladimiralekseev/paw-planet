@@ -252,7 +252,7 @@ class LostPetController extends AccessController
      * @OA\Put(
      *     path="/lost-pet/{id}/update/",
      *     security={{"bearerAuth":{}}},
-     *     tags={"Pet"},
+     *     tags={"Lost Pet"},
      *     @OA\Parameter(
      *          name="id",
      *          in="path",
@@ -273,48 +273,79 @@ class LostPetController extends AccessController
      *         @OA\MediaType(
      *             mediaType="application/json",
      *             @OA\Schema(
-     *                 required={"nickname", "breed_id"},
+     *                 required={"color_ids","latitude","longitude","country","state","city","address",
+     *     "when", "type"},
      *                 @OA\Property(
      *                     property="nickname",
      *                     type="string",
      *                     maxLength=128,
      *                 ),
      *                 @OA\Property(
-     *                     property="description",
-     *                     type="string",
-     *                     maxLength=1024,
-     *                 ),
-     *                 @OA\Property(
-     *                     property="needs",
-     *                     type="string",
-     *                     maxLength=1024,
-     *                 ),
-     *                 @OA\Property(
-     *                     property="good_with",
-     *                     type="string",
-     *                     maxLength=1024,
-     *                 ),
-     *                 @OA\Property(
      *                     property="breed_id",
      *                     type="integer",
      *                 ),
      *                 @OA\Property(
+     *                     property="color_ids",
+     *                     type="string",
+     *                     maxLength=128,
+     *                 ),
+     *                 @OA\Property(
+     *                     description="Months count",
      *                     property="age",
      *                     type="integer",
      *                 ),
      *                 @OA\Property(
-     *                     description="Days of week, example: 1,3,6",
-     *                     property="available",
-     *                     type="integer",
+     *                     property="latitude",
+     *                     type="number",
+     *                 ),
+     *                 @OA\Property(
+     *                     property="longitude",
+     *                     type="number",
+     *                 ),
+     *                 @OA\Property(
+     *                     property="country",
+     *                     type="string",
+     *                     maxLength=64,
+     *                 ),
+     *                 @OA\Property(
+     *                     property="state",
+     *                     type="string",
+     *                     maxLength=64,
+     *                 ),
+     *                 @OA\Property(
+     *                     property="city",
+     *                     type="string",
+     *                     maxLength=64,
+     *                 ),
+     *                 @OA\Property(
+     *                     property="address",
+     *                     type="string",
+     *                     maxLength=128,
+     *                 ),
+     *                 @OA\Property(
+     *                     description="Type (lost, found)",
+     *                     property="type",
+     *                     type="string",
+     *                     maxLength=8,
+     *                 ),
+     *                 @OA\Property(
+     *                     property="when",
+     *                     type="string",
+     *                     maxLength=16,
      *                 ),
      *                 example={
      *                      "nickname": "nickname",
-     *                      "description": "description",
-     *                      "needs": "needs",
-     *                      "good_with": "good_with",
      *                      "breed_id": 1,
+     *                      "color_ids": "2,5",
      *                      "age": 2,
-     *                      "available": "1,3,7",
+     *                      "latitude": "50.4450105000000",
+     *                      "longitude": "30.4188569000000",
+     *                      "country": "USA",
+     *                      "state": "Missouri",
+     *                      "city": "Branson",
+     *                      "address": "123 Street",
+     *                      "type": "lost",
+     *                      "when": "2024-01-22",
      *                  }
      *             )
      *         )
