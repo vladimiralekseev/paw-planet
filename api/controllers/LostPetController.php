@@ -60,7 +60,7 @@ class LostPetController extends AccessController
      *                 @OA\Schema(
      *                     example={
      *                          "pagination": {
-     *                              "totalCount": "1"
+     *                              "pageSize": "20"
      *                           },
      *                          "pets": {
      *                              {
@@ -87,7 +87,7 @@ class LostPetController extends AccessController
             'pagination' => [
                 'totalCount' => $itemCount,
                 'page'       => $pagination->page + 1,
-                'pageCount'  => $pagination->pageCount,
+                'pageSize'   => $pagination->pageSize,
             ],
             'pets'       => $query->offset($pagination->offset)->limit($pagination->limit)->all()
         ];

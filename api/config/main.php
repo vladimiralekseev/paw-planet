@@ -93,6 +93,8 @@ return [
                 '/user-profile/<id:[\d]+>/'                     => 'user-profile/detail',
                 '/my-lost-pet/list/'                            => 'lost-pet/list',
                 '/lost-pet/<id:[\d]+>/update/'                  => 'lost-pet/update',
+                '/lost-pet/list/'                               => 'lost-pet-public/list',
+                '/lost-pet/<id:[\d]+>/detail/'                  => 'lost-pet-public/detail',
                 '/my-pet/list/'                                 => 'pet/list',
                 '/pet/<id:[\d]+>/update/'                       => 'pet/update',
                 '/pet/<id:[\d]+>/walk/<status:[\d]+>/'          => 'pet/update-walk',

@@ -4,10 +4,9 @@ namespace api\controllers;
 
 use api\models\forms\UserProfileForm;
 use common\models\SiteUser;
-use common\models\SiteUserPublic;
+use common\models\SiteUserPublicFull;
 use common\models\upload\ProfilePreviewUploadForm;
 use common\models\upload\ProfileSmallPreviewUploadForm;
-use common\models\UserRequestPet;
 use Throwable;
 use Yii;
 use yii\db\StaleObjectException;
@@ -459,8 +458,8 @@ class UserProfileController extends AccessController
      */
     public function actionDetail($id)
     {
-        /** @var SiteUserPublic $user */
-        $user = SiteUserPublic::find()->where(['id' => $id])->one();
+        /** @var SiteUserPublicFull $user */
+        $user = SiteUserPublicFull::find()->where(['id' => $id])->one();
         if (!$user) {
             throw new NotFoundHttpException('User not found.');
         }

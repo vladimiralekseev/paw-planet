@@ -2,15 +2,15 @@
 
 namespace api\controllers;
 
-use api\models\forms\PetListForm;
-use common\models\PetDetail;
+use api\models\forms\LostPetListForm;
+use common\models\LostPet;
 use Yii;
 use yii\data\Pagination;
 use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 
-class PetPublicController extends BaseController
+class LostPetPublicController extends BaseController
 {
     public function behaviors(): array
     {
@@ -29,16 +29,24 @@ class PetPublicController extends BaseController
     }
 
     /**
-     * Pet list
+     * Lost Pet list
      *
      * @OA\Get(
-     *     path="/pet/list/",
-     *     tags={"Pet"},
+     *     path="/lost-pet/list/",
+     *     tags={"Lost Pet"},
      *     @OA\Parameter(
      *          name="page",
      *          in="query",
      *          @OA\Schema(
      *              type="integer",
+     *          ),
+     *          style="form"
+     *     ),
+     *     @OA\Parameter(
+     *          name="nickname",
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string",
      *          ),
      *          style="form"
      *     ),
@@ -76,20 +84,20 @@ class PetPublicController extends BaseController
      *          style="form"
      *     ),
      *     @OA\Parameter(
-     *         description="For borrow (1 or 0)",
-     *          name="for_borrow",
-     *          in="query",
+     *          description="Color ids, example: 1,14,22",
      *          @OA\Schema(
-     *              type="integer",
+     *              type="string",
      *          ),
+     *          name="color_ids",
+     *          in="query",
      *          style="form"
      *     ),
      *     @OA\Parameter(
-     *         description="For walk (1 or 0)",
-     *          name="for_walk",
+     *         description="Type (lost or found)",
+     *          name="type",
      *          in="query",
      *          @OA\Schema(
-     *              type="integer",
+     *              type="string",
      *          ),
      *          style="form"
      *     ),
@@ -106,15 +114,6 @@ class PetPublicController extends BaseController
      *          in="query",
      *          @OA\Schema(
      *              type="integer",
-     *          ),
-     *          style="form"
-     *     ),
-     *     @OA\Parameter(
-     *          description="Day of week (from 1 to 7), example: 1,5,7",
-     *          name="available",
-     *          in="query",
-     *          @OA\Schema(
-     *              type="string",
      *          ),
      *          style="form"
      *     ),
@@ -147,7 +146,7 @@ class PetPublicController extends BaseController
      */
     public function actionList(): array
     {
-        $petListForm = new PetListForm();
+        $petListForm = new LostPetListForm();
         $petListForm->load(Yii::$app->request->get());
 
         if ($petListForm->validate()) {
@@ -173,11 +172,11 @@ class PetPublicController extends BaseController
     }
 
     /**
-     * Pet details
+     * Lost Pet details
      *
      * @OA\Get(
-     *     path="/pet/{id}/detail/",
-     *     tags={"Pet"},
+     *     path="/lost-pet/{id}/detail/",
+     *     tags={"Lost Pet"},
      *     @OA\Parameter(
      *          name="id",
      *          in="path",
@@ -210,7 +209,7 @@ class PetPublicController extends BaseController
      */
     public function actionDetail($id)
     {
-        $pet = PetDetail::find()->where(['id' => $id])->one();
+        $pet = LostPet::find()->where(['id' => $id])->one();
 
         if (!$pet) {
             throw new NotFoundHttpException('Pet not found.');
