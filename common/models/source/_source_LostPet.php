@@ -21,7 +21,7 @@ use Yii;
  * @property string|null $country
  * @property string|null $state
  * @property string|null $city
- * @property string|null $address
+ * @property string $address
  * @property string|null $when
  * @property string|null $created_at
  * @property string|null $updated_at
@@ -49,13 +49,13 @@ class _source_LostPet extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nickname', 'user_id', 'type'], 'required'],
+            [['nickname', 'user_id', 'type', 'address'], 'required'],
             [['breed_id', 'user_id', 'img_id', 'middle_img_id', 'small_img_id', 'age'], 'integer'],
             [['latitude', 'longitude'], 'number'],
             [['when', 'created_at', 'updated_at'], 'safe'],
-            [['nickname'], 'string', 'max' => 128],
+            [['nickname', 'address'], 'string', 'max' => 128],
             [['type'], 'string', 'max' => 8],
-            [['country', 'state', 'city', 'address'], 'string', 'max' => 64],
+            [['country', 'state', 'city'], 'string', 'max' => 64],
             [['breed_id'], 'exist', 'skipOnError' => true, 'targetClass' => Breed::class, 'targetAttribute' => ['breed_id' => 'id']],
             [['img_id'], 'exist', 'skipOnError' => true, 'targetClass' => Files::class, 'targetAttribute' => ['img_id' => 'id']],
             [['middle_img_id'], 'exist', 'skipOnError' => true, 'targetClass' => Files::class, 'targetAttribute' => ['middle_img_id' => 'id']],

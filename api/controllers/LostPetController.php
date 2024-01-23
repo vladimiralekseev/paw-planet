@@ -112,7 +112,8 @@ class LostPetController extends AccessController
      *         @OA\MediaType(
      *             mediaType="application/json",
      *             @OA\Schema(
-     *                 required={"nickname", "color_ids"},
+     *                 required={"color_ids","latitude","longitude","country","state","city","address",
+     *     "when", "type"},
      *                 @OA\Property(
      *                     property="nickname",
      *                     type="string",
