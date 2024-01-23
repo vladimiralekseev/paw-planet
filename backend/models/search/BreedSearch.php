@@ -2,17 +2,17 @@
 
 namespace backend\models\search;
 
-use common\models\Color;
+use common\models\Breed;
 use Yii;
 use yii\data\ActiveDataProvider;
 
-class ColorSearch extends Color
+class BreedSearch extends Breed
 {
     public function rules(): array
     {
         return [
             [['id'], 'integer'],
-            [['color'], 'string'],
+            [['name'], 'string'],
         ];
     }
 
@@ -28,7 +28,7 @@ class ColorSearch extends Color
                 ],
                 'sort'       => [
                     'defaultOrder' => [
-                        'color' => SORT_ASC,
+                        'name' => SORT_ASC,
                     ],
                 ],
             ]
@@ -44,7 +44,7 @@ class ColorSearch extends Color
             ]
         );
 
-        $query->andFilterWhere(['like', 'color', $this->color]);
+        $query->andFilterWhere(['like', 'name', $this->name]);
 
         return $dataProvider;
     }

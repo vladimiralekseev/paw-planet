@@ -21,4 +21,11 @@ class Color extends _source_Color
             ],
         ];
     }
+
+    public function rules(): array
+    {
+        return array_merge(parent::rules(), [
+            [['color'], 'unique'],
+        ]);
+    }
 }

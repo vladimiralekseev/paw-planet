@@ -1,16 +1,16 @@
 <?php
 
-use common\models\Color;
+use common\models\Breed;
 use yii\web\View;
 
 /**
  * @var View  $this
- * @var Color $model
+ * @var Breed $model
  */
 
-$this->title = $model->color;
-$this->params['breadcrumbs'][] = ['label' => 'Colors', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->color, 'url' => ['view', 'id' => $model->id]];
+$this->title = $model->name;
+$this->params['breadcrumbs'][] = ['label' => 'Breeds', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Editing';
 ?>
 
