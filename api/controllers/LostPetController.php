@@ -3,9 +3,12 @@
 namespace api\controllers;
 
 use api\models\forms\LostPetForm;
+use api\models\forms\LostPetImageForm;
 use common\models\LostPet;
+use Throwable;
 use Yii;
 use yii\data\Pagination;
+use yii\db\StaleObjectException;
 use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
 
@@ -19,9 +22,10 @@ class LostPetController extends AccessController
                 'verbs' => [
                     'class'   => VerbFilter::class,
                     'actions' => [
-                        'list'          => ['get'],
-                        'create'        => ['post'],
-                        'update'        => ['put'],
+                        'list'         => ['get'],
+                        'create'       => ['post'],
+                        'update'       => ['put'],
+                        'image-upload' => ['post'],
                     ],
                 ],
             ]
@@ -401,6 +405,101 @@ class LostPetController extends AccessController
             );
         }
         if ($errors = $petForm->getErrorSummary(true)) {
+            throw new BadRequestHttpException(array_shift($errors));
+        }
+
+        throw new BadRequestHttpException('Undefined error');
+    }
+
+    /**
+     * Upload an image
+     *
+     * @OA\Post(
+     *     path="/lost-pet/{id}/image-upload/",
+     *     security={{"bearerAuth":{}}},
+     *     tags={"Lost Pet"},
+     *     @OA\SecurityScheme(
+     *          securityScheme="bearerAuth",
+     *          in="header",
+     *          name="bearerAuth",
+     *          type="http",
+     *          scheme="bearer",
+     *          bearerFormat="JWT",
+     *      ),
+     *     @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer",
+     *          ),
+     *          style="form"
+     *     ),
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 required={"file"},
+     *                 @OA\Property(
+     *                     description="file to upload",
+     *                     property="file",
+     *                     type="string",
+     *                     format="binary",
+     *                 ),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="The data",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     @OA\Property(
+     *                         property="name",
+     *                         type="string"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="status",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="code",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="message",
+     *                         type="string"
+     *                     ),
+     *                     example={
+     *                         "name": "Success",
+     *                         "status": 200,
+     *                         "code": 0,
+     *                         "message": "Image is uploaded!"
+     *                     }
+     *                 )
+     *             )
+     *         }
+     *     )
+     * )
+     *
+     * @param $id
+     *
+     * @return array
+     * @throws BadRequestHttpException
+     * @throws Throwable
+     * @throws StaleObjectException
+     */
+    public function actionImageUpload($id): array
+    {
+        $petImageForm = new LostPetImageForm(['lost_pet_id' => $id]);
+
+        if ($petImageForm->save()) {
+            return $this->successResponse(
+                'Image is uploaded!'
+            );
+        }
+        if ($errors = $petImageForm->getErrorSummary(true)) {
             throw new BadRequestHttpException(array_shift($errors));
         }
 

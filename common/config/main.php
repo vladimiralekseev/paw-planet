@@ -68,6 +68,27 @@ return [
                         ['crop', 'width' => 40, 'height' => 40, 'x' => 'center - 20', 'y' => 'center - 20'],
                     ],
                 ],
+                'lostPetImage' => [
+                    'process' => [
+                        ['autorotate'],
+                        ['resize', 'width' => 1200, 'height' => 800, 'scaleTo' => 'cover'],
+                        ['crop', 'width' => 1200, 'height' => 800, 'x' => 'center - 600', 'y' => 'center - 400'],
+                    ],
+                ],
+                'lostPetImageMiddle' => [
+                    'process' => [
+                        ['autorotate'],
+                        ['resize', 'width' => 160, 'height' => 160, 'scaleTo' => 'cover'],
+                        ['crop', 'width' => 160, 'height' => 160, 'x' => 'center - 80', 'y' => 'center - 80'],
+                    ],
+                ],
+                'lostPetImageSmall' => [
+                    'process' => [
+                        ['autorotate'],
+                        ['resize', 'width' => 80, 'height' => 80, 'scaleTo' => 'cover'],
+                        ['crop', 'width' => 80, 'height' => 80, 'x' => 'center - 40', 'y' => 'center - 40'],
+                    ],
+                ],
             ],
         ],
     ],
