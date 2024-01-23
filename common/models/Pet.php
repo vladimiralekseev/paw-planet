@@ -2,12 +2,29 @@
 
 namespace common\models;
 
+use Throwable;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
+use yii\db\StaleObjectException;
 
 class Pet extends _source_Pet
 {
+    /**
+     * @return bool
+     * @throws StaleObjectException
+     * @throws Throwable
+     */
+    public function beforeDelete(): bool
+    {
+        if (!empty($this->petImages)) {
+            foreach ($this->petImages as $petImage) {
+                $petImage->delete();
+            }
+        }
+        return parent::beforeDelete();
+    }
+
     public function behaviors(): array
     {
         return [
@@ -27,31 +44,34 @@ class Pet extends _source_Pet
         $arr = array_merge(
             parent::fields(),
             [
-                'breed' => static function($model) {
+                'breed'      => static function ($model) {
                     return $model->breed;
                 },
-                'for_borrow' => static function($model) {
+                'for_borrow' => static function ($model) {
                     return (bool)$model->for_borrow;
                 },
-                'for_walk' => static function($model) {
+                'for_walk'   => static function ($model) {
                     return (bool)$model->for_walk;
                 },
-                'img' => static function($model) {
+                'img'        => static function ($model) {
                     return $model->img ? $model->img->url : null;
                 },
-                'small_img' => static function($model) {
+                'small_img'  => static function ($model) {
                     return $model->smallImg ? $model->smallImg->url : null;
                 },
-                'middle_img' => static function($model) {
+                'middle_img' => static function ($model) {
                     return $model->middleImg ? $model->middleImg->url : null;
                 },
-                'user' => static function($model) {
+                'user'       => static function ($model) {
                     return SiteUserPublic::find()->where(['id' => $model->user_id])->one();
                 },
-                'available' => static function($model) {
-                    return array_map(static function($it) {
-                        return $it->day;
-                    }, $model->petAvailables);
+                'available'  => static function ($model) {
+                    return array_map(
+                        static function ($it) {
+                            return $it->day;
+                        },
+                        $model->petAvailables
+                    );
                 },
             ]
         );

@@ -2,12 +2,33 @@
 
 namespace common\models;
 
+use Throwable;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
+use yii\db\StaleObjectException;
 
 class LostPet extends _source_LostPet
 {
+    /**
+     * @return bool
+     * @throws Throwable
+     * @throws StaleObjectException
+     */
+    public function beforeDelete(): bool
+    {
+        if (!empty($this->img)) {
+            $this->img->delete();
+        }
+        if (!empty($this->smallImg)) {
+            $this->smallImg->delete();
+        }
+        if (!empty($this->middleImg)) {
+            $this->middleImg->delete();
+        }
+        return parent::beforeDelete();
+    }
+
     public function behaviors(): array
     {
         return [
