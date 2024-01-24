@@ -2,7 +2,9 @@
 
 namespace api\controllers;
 
+use Yii;
 use yii\filters\ContentNegotiator;
+use yii\filters\Cors;
 use yii\rest\Controller;
 use yii\web\Response;
 
@@ -18,6 +20,14 @@ class BaseController extends Controller
                 'application/json' => Response::FORMAT_JSON,
             ],
         ];
+        if (Yii::$app->params['corsOrigin']) {
+            $behaviors['corsFilter'] = [
+                'class' => Cors::class,
+                'cors'  => [
+                    'Origin' => Yii::$app->params['corsOrigin'],
+                ],
+            ];
+        }
 
         return $behaviors;
     }
