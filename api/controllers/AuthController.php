@@ -295,11 +295,17 @@ class AuthController extends BaseController
      *                         property="created_at",
      *                         type="string"
      *                     ),
+     *                     @OA\Property(
+     *                         description="Hours",
+     *                         property="expires_in",
+     *                         type="integer"
+     *                     ),
      *                     example={
      *                         "token":
      *     "846d50d91708ae02362e3e19333ddae8aea561c5b83ccb153d79a8e444ddb86850399a67d647a6cdedd946ef05bf68899e5b7002002719b4dc37790c8c11f4a2",
      *                         "expired_at": "2023-12-20 07:47:33",
-     *                         "created_at": "2023-12-19 19:47:33"
+     *                         "created_at": "2023-12-19 19:47:33",
+     *                         "expires_in": 24
      *                     }
      *                 )
      *             )

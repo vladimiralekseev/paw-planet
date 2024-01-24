@@ -11,6 +11,8 @@ use yii\db\Expression;
 
 class SiteUserToken extends _source_SiteUserToken
 {
+    public const EXPIRED_TIME = 24;
+
     public function behaviors(): array
     {
         return [
@@ -30,6 +32,9 @@ class SiteUserToken extends _source_SiteUserToken
             'token',
             'expired_at',
             'created_at',
+            'expires_in' => static function() {
+                return self::EXPIRED_TIME;
+            },
         ];
     }
 
@@ -40,7 +45,8 @@ class SiteUserToken extends _source_SiteUserToken
             [
                 'site_user_id' => $user->id,
                 'token'        => bin2hex(random_bytes(64)),
-                'expired_at'   => (new DateTime())->add(new DateInterval('P1D'))->format('Y-m-d h:i:s'),
+                'expired_at'   => (new DateTime())->add(new DateInterval('PT' . self::EXPIRED_TIME . 'H'))
+                    ->format('Y-m-d h:i:s'),
             ]
         );
         $token->save();
