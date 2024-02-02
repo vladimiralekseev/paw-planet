@@ -27,7 +27,7 @@ class UserProfileController extends AccessController
                     'actions' => [
                         'index'         => ['get'],
                         'detail'        => ['get'],
-                        'update'        => ['post'],
+                        'update'        => ['put'],
                         'avatar'        => ['post'],
                         'avatar-delete' => ['delete'],
                     ],
@@ -89,7 +89,7 @@ class UserProfileController extends AccessController
     }
 
     /**
-     * @OA\Post(
+     * @OA\Put(
      *     path="/user-profile/update/",
      *     security={{"bearerAuth":{}}},
      *     tags={"User"},
