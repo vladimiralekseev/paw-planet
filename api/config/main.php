@@ -107,6 +107,7 @@ return [
                 '/pet-images/set-as-main/<pet_image_id:[\d]+>/' => 'pet-images/set-as-main',
                 '/pet/breeds/'                                  => 'breed/index',
                 '/request/<id:[\d]+>/status/<status:[\w]+>/'    => 'request/status',
+                '/response/<id:[\d]+>/status/<status:[\w]+>/'   => 'response/status',
                 '/colors/'                                      => 'color/list',
                 '/breeds/'                                      => 'breed/list',
             ],

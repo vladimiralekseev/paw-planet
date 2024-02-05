@@ -45,7 +45,7 @@ class LostPetListForm extends Model
 
     public function getQuery(): ActiveQuery
     {
-        $query = LostPet::find();
+        $query = LostPet::find()->where([LostPet::tableName() . '.status' => LostPet::STATUS_ACTIVE]);
         $query->innerJoinWith(['user']);
         if (!empty($this->distance) && !empty($this->lat) && !empty($this->lng)) {
             $query->select(

@@ -34,7 +34,9 @@ use Yii;
  * @property string|null $address
  *
  * @property Files $img
+ * @property LostPet[] $lostPets
  * @property Pet[] $pets
+ * @property ResponseLostPet[] $responseLostPets
  * @property SiteUserToken[] $siteUserTokens
  * @property Files $smallImg
  * @property UserRequestPet[] $userRequestPets
@@ -118,6 +120,16 @@ class _source_SiteUser extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[LostPets]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLostPets()
+    {
+        return $this->hasMany(LostPet::class, ['user_id' => 'id']);
+    }
+
+    /**
      * Gets query for [[Pets]].
      *
      * @return \yii\db\ActiveQuery
@@ -125,6 +137,16 @@ class _source_SiteUser extends \yii\db\ActiveRecord
     public function getPets()
     {
         return $this->hasMany(Pet::class, ['user_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[ResponseLostPets]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getResponseLostPets()
+    {
+        return $this->hasMany(ResponseLostPet::class, ['request_owner_id' => 'id']);
     }
 
     /**

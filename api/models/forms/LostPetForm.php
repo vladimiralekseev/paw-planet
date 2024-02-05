@@ -41,7 +41,7 @@ class LostPetForm extends Model
             [['when'], 'safe'],
             [['nickname', 'address'], 'string', 'max' => 128],
             [['type'], 'string', 'max' => 8],
-            ['type', 'in', 'range' => ['lost', 'found']],
+            ['type', 'in', 'range' => [LostPet::TYPE_LOST, LostPet::TYPE_FOUND]],
             ['when', 'checkWhen'],
             ['color_ids', 'checkColorIds'],
             [['country', 'state', 'city'], 'string', 'max' => 64],
@@ -94,6 +94,7 @@ class LostPetForm extends Model
             $pet = new LostPet(['user_id' => Yii::$app->user->identity->id]);
         }
 
+        $pet->status = LostPet::STATUS_ACTIVE;
         $pet->nickname = $this->nickname;
         $pet->breed_id = $this->breed_id;
         $pet->age = $this->age;

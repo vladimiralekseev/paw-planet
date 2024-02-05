@@ -10,6 +10,13 @@ use yii\db\StaleObjectException;
 
 class LostPet extends _source_LostPet
 {
+    const STATUS_ACTIVE   = 1;
+    const STATUS_FINISHED = 2;
+    const STATUS_BLOCKED  = 3;
+
+    const TYPE_LOST = 'lost';
+    const TYPE_FOUND = 'found';
+
     /**
      * @return bool
      * @throws Throwable
@@ -48,27 +55,43 @@ class LostPet extends _source_LostPet
         $arr = array_merge(
             parent::fields(),
             [
-                'breed' => static function($model) {
+                'breed'      => static function ($model) {
                     return $model->breed;
                 },
-                'img' => static function($model) {
+                'img'        => static function ($model) {
                     return $model->img ? $model->img->url : null;
                 },
-                'small_img' => static function($model) {
+                'small_img'  => static function ($model) {
                     return $model->smallImg ? $model->smallImg->url : null;
                 },
-                'middle_img' => static function($model) {
+                'middle_img' => static function ($model) {
                     return $model->middleImg ? $model->middleImg->url : null;
                 },
-                'user' => static function($model) {
+                'user'       => static function ($model) {
                     return SiteUserPublic::find()->where(['id' => $model->user_id])->one();
                 },
-                'colors' => static function(LostPet $model) {
+                'colors'     => static function (LostPet $model) {
                     return $model->petColors;
                 },
             ]
         );
         unset($arr['breed_id'], $arr['user_id'], $arr['img_id'], $arr['middle_img_id'], $arr['small_img_id']);
         return $arr;
+    }
+
+    public static function getStatusList(): array
+    {
+        return [
+            self::STATUS_ACTIVE   => 'Active',
+            self::STATUS_FINISHED => 'Finished',
+            self::STATUS_BLOCKED  => 'Blocked',
+        ];
+    }
+
+    public static function getStatusValue($val): string
+    {
+        $ar = self::getStatusList();
+
+        return $ar[$val] ?? $val;
     }
 }

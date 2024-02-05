@@ -25,11 +25,13 @@ use Yii;
  * @property string|null $when
  * @property string|null $created_at
  * @property string|null $updated_at
+ * @property int $status
  *
  * @property Breed $breed
  * @property Files $img
  * @property Files $middleImg
  * @property PetColor[] $petColors
+ * @property ResponseLostPet[] $responseLostPets
  * @property Files $smallImg
  * @property SiteUser $user
  */
@@ -50,7 +52,7 @@ class _source_LostPet extends \yii\db\ActiveRecord
     {
         return [
             [['nickname', 'user_id', 'type', 'address'], 'required'],
-            [['breed_id', 'user_id', 'img_id', 'middle_img_id', 'small_img_id', 'age'], 'integer'],
+            [['breed_id', 'user_id', 'img_id', 'middle_img_id', 'small_img_id', 'age', 'status'], 'integer'],
             [['latitude', 'longitude'], 'number'],
             [['when', 'created_at', 'updated_at'], 'safe'],
             [['nickname', 'address'], 'string', 'max' => 128],
@@ -88,6 +90,7 @@ class _source_LostPet extends \yii\db\ActiveRecord
             'when' => 'When',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'status' => 'Status',
         ];
     }
 
@@ -129,6 +132,16 @@ class _source_LostPet extends \yii\db\ActiveRecord
     public function getPetColors()
     {
         return $this->hasMany(PetColor::class, ['lost_pet_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[ResponseLostPets]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getResponseLostPets()
+    {
+        return $this->hasMany(ResponseLostPet::class, ['lost_pet_id' => 'id']);
     }
 
     /**
