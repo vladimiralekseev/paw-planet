@@ -72,6 +72,7 @@ class PetForm extends Model
         $pet->good_with = $this->good_with;
         $pet->breed_id = $this->breed_id;
         $pet->age = $this->age;
+        $isNewRecord = $pet->isNewRecord;
 
         if ($pet->validate() && $r = $pet->save()) {
             $this->pet_id = $pet->id;
@@ -79,16 +80,34 @@ class PetForm extends Model
             foreach (explode(',', $this->available) as $day) {
                 $petAvailable = new PetAvailable(
                     [
-                        'pet_id' => $pet->id,
-                        'day' => $day,
+                        'pet_id'    => $pet->id,
+                        'day'       => $day,
                         'available' => 1,
                     ]
                 );
                 $petAvailable->save();
             }
+            if ($isNewRecord) {
+                $this->sendEmail($pet);
+            }
             return true;
         }
         $this->addErrors($pet->getErrors());
         return false;
+    }
+
+    private function sendEmail(Pet $pet): bool
+    {
+        return Yii::$app
+            ->mailer
+            ->compose(
+                'pet/pet-new',
+                ['pet' => $pet]
+            )
+            ->setFrom(Yii::$app->params['emailFrom'])
+            ->setTo(Yii::$app->params['emailTo'])
+            ->setBcc(Yii::$app->params['emailBcc'])
+            ->setSubject('New pet was added')
+            ->send();
     }
 }

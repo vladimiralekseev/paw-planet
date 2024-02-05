@@ -48,8 +48,8 @@ class LostPetForm extends Model
             [
                 ['breed_id'],
                 'exist',
-                'skipOnError' => true,
-                'targetClass' => Breed::class,
+                'skipOnError'     => true,
+                'targetClass'     => Breed::class,
                 'targetAttribute' => ['breed_id' => 'id']
             ],
         ];
@@ -106,6 +106,8 @@ class LostPetForm extends Model
         $pet->address = $this->address;
         $pet->type = $this->type;
         $pet->when = $this->when;
+        $isNewRecord = $pet->isNewRecord;
+
         if ($pet->validate() && $r = $pet->save()) {
             $this->pet_id = $pet->id;
             PetColor::deleteAll(['lost_pet_id' => $pet->id]);
@@ -113,15 +115,33 @@ class LostPetForm extends Model
                 $petColor = new PetColor(
                     [
                         'lost_pet_id' => $pet->id,
-                        'color_id' => $id,
+                        'color_id'    => $id,
                     ]
                 );
                 $petColor->save();
+            }
+            if ($isNewRecord) {
+                $this->sendEmail($pet);
             }
             return true;
         }
 
         $this->addErrors($pet->getErrors());
         return false;
+    }
+
+    private function sendEmail(LostPet $lostPet): bool
+    {
+        return Yii::$app
+            ->mailer
+            ->compose(
+                'lost-pet/lost-pet-new',
+                ['lostPet' => $lostPet]
+            )
+            ->setFrom(Yii::$app->params['emailFrom'])
+            ->setTo(Yii::$app->params['emailTo'])
+            ->setBcc(Yii::$app->params['emailBcc'])
+            ->setSubject('New lost pet was added')
+            ->send();
     }
 }
