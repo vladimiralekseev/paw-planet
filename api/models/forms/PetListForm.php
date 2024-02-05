@@ -48,7 +48,7 @@ class PetListForm extends Model
 
     public function getQuery(): ActiveQuery
     {
-        $query = Pet::find();
+        $query = Pet::find()->where(['status' => Pet::STATUS_ACTIVE]);
         $query->innerJoinWith(['user']);
         if (!empty($this->distance) && !empty($this->lat) && !empty($this->lng)) {
             $query->select(

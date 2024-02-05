@@ -22,6 +22,7 @@ use Yii;
  * @property string|null $good_with
  * @property string|null $created_at
  * @property string|null $updated_at
+ * @property int $status
  *
  * @property Breed $breed
  * @property Files $img
@@ -49,7 +50,7 @@ class _source_Pet extends \yii\db\ActiveRecord
     {
         return [
             [['nickname'], 'required'],
-            [['breed_id', 'user_id', 'img_id', 'middle_img_id', 'small_img_id', 'age', 'for_borrow', 'for_walk'], 'integer'],
+            [['breed_id', 'user_id', 'img_id', 'middle_img_id', 'small_img_id', 'age', 'for_borrow', 'for_walk', 'status'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['nickname'], 'string', 'max' => 128],
             [['description', 'needs', 'good_with'], 'string', 'max' => 1024],
@@ -82,6 +83,7 @@ class _source_Pet extends \yii\db\ActiveRecord
             'good_with' => 'Good With',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'status' => 'Status',
         ];
     }
 

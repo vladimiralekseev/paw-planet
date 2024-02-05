@@ -209,7 +209,7 @@ class LostPetPublicController extends BaseController
      */
     public function actionDetail($id)
     {
-        $pet = LostPet::find()->where(['id' => $id])->one();
+        $pet = LostPet::find()->where(['id' => $id, 'status' => LostPet::STATUS_ACTIVE])->one();
 
         if (!$pet) {
             throw new NotFoundHttpException('Pet not found.');

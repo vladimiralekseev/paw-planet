@@ -3,6 +3,7 @@
 namespace api\controllers;
 
 use api\models\forms\PetListForm;
+use common\models\Pet;
 use common\models\PetDetail;
 use Yii;
 use yii\data\Pagination;
@@ -210,7 +211,7 @@ class PetPublicController extends BaseController
      */
     public function actionDetail($id)
     {
-        $pet = PetDetail::find()->where(['id' => $id])->one();
+        $pet = PetDetail::find()->where(['id' => $id, 'status' => Pet::STATUS_ACTIVE])->one();
 
         if (!$pet) {
             throw new NotFoundHttpException('Pet not found.');

@@ -10,6 +10,10 @@ use yii\db\StaleObjectException;
 
 class Pet extends _source_Pet
 {
+    const STATUS_ACTIVE   = 1;
+    const STATUS_INACTIVE = 2;
+    const STATUS_BLOCKED  = 3;
+
     /**
      * @return bool
      * @throws StaleObjectException
@@ -77,5 +81,21 @@ class Pet extends _source_Pet
         );
         unset($arr['breed_id'], $arr['user_id'], $arr['img_id'], $arr['middle_img_id'], $arr['small_img_id']);
         return $arr;
+    }
+
+    public static function getStatusList(): array
+    {
+        return [
+            self::STATUS_ACTIVE   => 'Active',
+            self::STATUS_INACTIVE => 'Inactive',
+            self::STATUS_BLOCKED  => 'Blocked',
+        ];
+    }
+
+    public static function getStatusValue($val): string
+    {
+        $ar = self::getStatusList();
+
+        return $ar[$val] ?? $val;
     }
 }
