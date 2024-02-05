@@ -1,13 +1,17 @@
 <?php
 
 use common\models\Pet;
+use common\models\UserRequestPet;
+use yii\data\ActiveDataProvider;
+use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\web\View;
 use yii\widgets\DetailView;
 
 /**
- * @var View $this
- * @var Pet  $model
+ * @var View               $this
+ * @var Pet                $model
+ * @var ActiveDataProvider $dataProviderRequest
  */
 
 $this->title = $model->nickname;
@@ -78,14 +82,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'attribute' => 'breed_id',
-                            'label' => 'Breed',
+                            'label'     => 'Breed',
                             'value'     => static function (Pet $model) {
                                 return $model->breed_id ? $model->breed->name : null;
                             },
                         ],
                         [
                             'attribute' => 'user_id',
-                            'label' => 'User',
+                            'label'     => 'User',
                             'value'     => static function (Pet $model) {
                                 return Html::a(
                                     $model->user->first_name . ' ' . $model->user->last_name,
@@ -139,3 +143,51 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+<?php if ($dataProviderRequest) { ?>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <label>Requests to this pet</label>
+
+            <div class="order-index">
+                <?= GridView::widget(
+                    [
+                        'id'           => 'order-grid',
+                        'dataProvider' => $dataProviderRequest,
+                        'layout'       => "{items}\n{pager}",
+                        'pager'        => [
+                            'options'          => ['class' => 'pagination pagination-sm'],
+                            'hideOnSinglePage' => true,
+                            'lastPageLabel'    => '>>',
+                            'firstPageLabel'   => '<<',
+                        ],
+                        'columns'      => [
+
+                            [
+                                'attribute' => 'id',
+                                'value'     => static function (UserRequestPet $model) {
+                                    return Html::a($model->id, ['view', 'id' => $model->id], ['data-pjax' => 0]);
+                                },
+                                'format'    => 'raw',
+                            ],
+                            [
+                                'attribute' => 'request_owner_id',
+                                'label' => 'Create request',
+                                'value'     => static function (UserRequestPet $model) {
+                                    return Html::a(
+                                        $model->requestOwner->first_name . ' ' . $model->requestOwner->last_name,
+                                        ['site-user/view', 'id' => $model->request_owner_id]
+                                    );
+                                },
+                                'format'    => 'raw',
+                            ],
+                            'type',
+                            'status',
+                            'created_at',
+                            'updated_at',
+                        ],
+                    ]
+                ) ?>
+            </div>
+        </div>
+    </div>
+<?php } ?>
