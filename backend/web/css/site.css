@@ -88,3 +88,10 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+.info-box-number {
+    line-height: 13px;
+}
+.info-box-number small {
+    font-size:12px!important;
+}
