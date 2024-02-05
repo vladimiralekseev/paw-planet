@@ -24,6 +24,10 @@ use yii\widgets\Menu;
                 'url'   => ['/pet']
             ],
             [
+                'label' => '<span class="fa fa-users"></span> ' . 'Site Users',
+                'url'   => ['/site-user']
+            ],
+            [
                 'label' => '<span class="fa fa-commenting"></span> ' . 'Reviews',
                 'url'   => ['/review']
             ],

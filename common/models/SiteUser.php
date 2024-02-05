@@ -10,6 +10,8 @@ use yii\web\IdentityInterface;
 
 /**
  * User model
+ *
+ * @property string $fullName
  */
 class SiteUser extends _source_SiteUser implements IdentityInterface
 {
@@ -259,5 +261,10 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
     public function generateAuthToken(): SiteUserToken
     {
         return SiteUserToken::generate($this);
+    }
+
+    public function getFullName(): string
+    {
+        return trim($this->first_name . ' ' . $this->last_name);
     }
 }

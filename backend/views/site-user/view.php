@@ -1,6 +1,6 @@
 <?php
 
-use common\models\Pet;
+use common\models\SiteUser;
 use common\models\UserRequestPet;
 use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
@@ -10,12 +10,24 @@ use yii\widgets\DetailView;
 
 /**
  * @var View               $this
- * @var Pet                $model
- * @var ActiveDataProvider $dataProviderRequest
+ * @var SiteUser           $model
+ * @var ActiveDataProvider $dataProviderRequestFrom
+ * @var ActiveDataProvider $dataProviderRequestTo
  */
 
-$this->title = $model->nickname;
-$this->params['breadcrumbs'][] = ['label' => 'Pets', 'url' => ['index']];
+$requests = [
+    [
+        'label' => 'Requests of this user',
+        'data'  => $dataProviderRequestFrom,
+    ],
+    [
+        'label' => 'Requests to this user',
+        'data'  => $dataProviderRequestTo,
+    ],
+];
+
+$this->title = $model->fullName;
+$this->params['breadcrumbs'][] = ['label' => 'Site Users', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="text-page-view">
@@ -50,57 +62,40 @@ $this->params['breadcrumbs'][] = $this->title;
                         'id',
                         [
                             'attribute' => 'status',
-                            'value'     => static function (Pet $model) {
+                            'value'     => static function (SiteUser $model) {
                                 $class = 'success';
-                                if ($model->status === Pet::STATUS_INACTIVE) {
+                                if ($model->status === SiteUser::STATUS_INACTIVE) {
                                     $class = 'warning';
                                 }
-                                if ($model->status === Pet::STATUS_BLOCKED) {
+                                if ($model->status === SiteUser::STATUS_DELETED) {
                                     $class = 'danger';
                                 }
                                 return '<span class="label label-' . $class . '">' .
-                                    Pet::getStatusValue($model->status)
+                                    SiteUser::getStatusValue($model->status)
                                     . '</span>';
                             },
                             'format'    => 'raw',
                         ],
-                        'nickname',
-                        'description',
-                        'needs',
+                        'first_name',
+                        'last_name',
+                        'email',
                         'good_with',
-                        [
-                            'attribute' => 'for_borrow',
-                            'value'     => static function (Pet $model) {
-                                return $model->for_borrow ? 'Yes' : 'No';
-                            },
-                        ],
-                        [
-                            'attribute' => 'for_walk',
-                            'value'     => static function (Pet $model) {
-                                return $model->for_walk ? 'Yes' : 'No';
-                            },
-                        ],
-                        [
-                            'attribute' => 'breed_id',
-                            'label'     => 'Breed',
-                            'value'     => static function (Pet $model) {
-                                return $model->breed_id ? $model->breed->name : null;
-                            },
-                        ],
-                        [
-                            'attribute' => 'user_id',
-                            'label'     => 'User',
-                            'value'     => static function (Pet $model) {
-                                return Html::a(
-                                    $model->user->first_name . ' ' . $model->user->last_name,
-                                    ['site-user/view', 'id' => $model->user_id]
-                                );
-                            },
-                            'format'    => 'html',
-                        ],
+                        'created_at',
+                        'updated_at',
+                        'phone_number',
+                        'about',
+                        'my_location',
+                        'whats_app',
+                        'facebook',
+                        'latitude',
+                        'longitude',
+                        'country',
+                        'state',
+                        'city',
+                        'address',
                         [
                             'attribute' => 'Small Image',
-                            'value'     => static function (Pet $model) {
+                            'value'     => static function (SiteUser $model) {
                                 return $model->small_img_id ? Html::img(
                                     $model->smallImg->getUrl(),
                                     [
@@ -111,20 +106,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format'    => 'html',
                         ],
                         [
-                            'attribute' => 'Middle Image',
-                            'value'     => static function (Pet $model) {
-                                return $model->middle_img_id ? Html::img(
-                                    $model->middleImg->getUrl(),
-                                    [
-                                        'style' => 'max-width:300px;',
-                                    ]
-                                ) : null;
-                            },
-                            'format'    => 'html',
-                        ],
-                        [
                             'attribute' => 'Image',
-                            'value'     => static function (Pet $model) {
+                            'value'     => static function (SiteUser $model) {
                                 return $model->img_id ? Html::img(
                                     $model->img->getUrl(),
                                     [
@@ -143,16 +126,16 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
-<?php if ($dataProviderRequest) { ?>
+<?php foreach ($requests as $it) { ?>
     <div class="panel panel-default">
         <div class="panel-body">
-            <label>Requests to this pet</label>
+            <label><?= $it['label'] ?></label>
 
             <div class="order-index">
                 <?= GridView::widget(
                     [
                         'id'           => 'order-grid',
-                        'dataProvider' => $dataProviderRequest,
+                        'dataProvider' => $it['data'],
                         'layout'       => "{items}\n{pager}",
                         'pager'        => [
                             'options'          => ['class' => 'pagination pagination-sm'],
@@ -171,11 +154,22 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'request_owner_id',
-                                'label' => 'Create request',
+                                'label'     => 'Create request',
                                 'value'     => static function (UserRequestPet $model) {
                                     return Html::a(
-                                        $model->requestOwner->first_name . ' ' . $model->requestOwner->last_name,
+                                        $model->requestOwner->fullName,
                                         ['site-user/view', 'id' => $model->request_owner_id]
+                                    );
+                                },
+                                'format'    => 'raw',
+                            ],
+                            [
+                                'attribute' => 'pet_id',
+                                'label'     => 'Pet',
+                                'value'     => static function (UserRequestPet $model) {
+                                    return Html::a(
+                                        $model->pet->nickname,
+                                        ['pet/view', 'id' => $model->pet->id]
                                     );
                                 },
                                 'format'    => 'raw',

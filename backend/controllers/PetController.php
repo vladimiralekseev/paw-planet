@@ -11,8 +11,6 @@ use yii\web\Response;
 
 class PetController extends CrudController
 {
-    use UploadFileTrait;
-
     public $modelClass = Pet::class;
     public $modelSearchClass = PetSearch::class;
 

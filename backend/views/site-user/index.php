@@ -1,7 +1,7 @@
 <?php
 
-use backend\models\search\PetSearch;
-use common\models\Pet;
+use backend\models\search\SiteUserSearch;
+use common\models\SiteUser;
 use webvimark\components\StatusColumn;
 use webvimark\extensions\GridPageSize\GridPageSize;
 use yii\data\ActiveDataProvider;
@@ -15,10 +15,10 @@ use yii\widgets\Pjax;
 /**
  * @var View               $this
  * @var ActiveDataProvider $dataProvider
- * @var PetSearch          $searchModel
+ * @var SiteUserSearch     $searchModel
  */
 
-$this->title = 'Pets';
+$this->title = 'Site Users';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -63,43 +63,26 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'attribute' => 'id',
-                            'value'     => static function (Pet $model) {
+                            'value'     => static function (SiteUser $model) {
                                 return Html::a($model->id, ['view', 'id' => $model->id], ['data-pjax' => 0]);
                             },
                             'format'    => 'raw',
                         ],
                         [
-                            'class' => StatusColumn::class,
-                            'attribute' => 'status',
+                            'class'        => StatusColumn::class,
+                            'attribute'    => 'status',
                             'optionsArray' => [
-                                [1, $searchModel::getStatusValue(1), 'success'],
-                                [2, $searchModel::getStatusValue(2), 'warning'],
-                                [3, $searchModel::getStatusValue(3), 'danger'],
+                                [10, $searchModel::getStatusValue(10), 'success'],
+                                [9, $searchModel::getStatusValue(9), 'warning'],
+                                [0, $searchModel::getStatusValue(0), 'danger'],
                             ],
                         ],
-                        'nickname',
-                        'description',
-                        'needs',
-                        'good_with',
-                        'age',
-                        [
-                            'attribute' => 'breed_id',
-                            'label' => 'Breed',
-                            'value'     => static function (Pet $model) {
-                                return $model->breed_id ? $model->breed->name : null;
-                            },
-                        ],
-                        [
-                            'attribute' => 'user_id',
-                            'label' => 'User',
-                            'value'     => static function (Pet $model) {
-                                return $model->user->fullName;
-                            },
-                            'format'    => 'html',
-                        ],
+                        'first_name',
+                        'last_name',
+                        'email',
                         [
                             'attribute' => 'Image',
-                            'value'     => static function ($model) {
+                            'value'     => static function (SiteUser $model) {
                                 return $model->small_img_id ? Html::img(
                                     $model->smallImg->getUrl(),
                                     [

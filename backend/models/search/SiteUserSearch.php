@@ -2,17 +2,18 @@
 
 namespace backend\models\search;
 
-use common\models\Pet;
+use common\models\Review;
+use common\models\SiteUser;
 use Yii;
 use yii\data\ActiveDataProvider;
 
-class PetSearch extends Pet
+class SiteUserSearch extends SiteUser
 {
     public function rules(): array
     {
         return [
-            [['id', 'status', 'age'], 'integer'],
-            [['nickname', 'description', 'needs', 'good_with'], 'string'],
+            [['id', 'status'], 'integer'],
+            [['first_name', 'last_name', 'email'], 'string'],
         ];
     }
 
@@ -28,7 +29,7 @@ class PetSearch extends Pet
                 ],
                 'sort'       => [
                     'defaultOrder' => [
-                        'id' => SORT_DESC,
+                        'id' => SORT_ASC,
                     ],
                 ],
             ]
@@ -42,14 +43,12 @@ class PetSearch extends Pet
             [
                 'id' => $this->id,
                 'status' => $this->status,
-                'age' => $this->age,
             ]
         );
 
-        $query->andFilterWhere(['like', 'nickname', $this->nickname]);
-        $query->andFilterWhere(['like', 'description', $this->description]);
-        $query->andFilterWhere(['like', 'needs', $this->needs]);
-        $query->andFilterWhere(['like', 'good_with', $this->good_with]);
+        $query->andFilterWhere(['like', 'first_name', $this->first_name]);
+        $query->andFilterWhere(['like', 'last_name', $this->last_name]);
+        $query->andFilterWhere(['like', 'email', $this->email]);
 
         return $dataProvider;
     }
