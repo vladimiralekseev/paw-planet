@@ -4,6 +4,8 @@ namespace common\models\upload;
 
 class PetImageSmallUploadForm extends UploadForm
 {
-    public $dir = 'pet-image-small';
+    public const DIR = 'pet-image-small';
+
+    public $dir = self::DIR;
     public $profile = 'petImageSmall';
 }

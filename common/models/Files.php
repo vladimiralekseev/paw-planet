@@ -8,6 +8,11 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 
+/**
+ * Class Files
+ *
+ * @property PetImages[] $petSmallImages
+ */
 class Files extends _source_Files
 {
     /**
@@ -89,5 +94,13 @@ class Files extends _source_Files
     public function base64(): string
     {
         return General::base64($this->getPath());
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPetSmallImages()
+    {
+        return $this->hasMany(PetImages::class, ['small_img_id' => 'id']);
     }
 }

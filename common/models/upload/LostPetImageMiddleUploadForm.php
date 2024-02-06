@@ -4,6 +4,8 @@ namespace common\models\upload;
 
 class LostPetImageMiddleUploadForm extends UploadForm
 {
-    public $dir = 'lost-pet-image-middle';
+    public const DIR = 'lost-pet-image-middle';
+
+    public $dir = self::DIR;
     public $profile = 'lostPetImageMiddle';
 }

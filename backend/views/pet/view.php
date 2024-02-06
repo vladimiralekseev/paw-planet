@@ -143,6 +143,14 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+
+<h3>Images</h3>
+<div class="images-om-main">
+    <?php foreach ($model->petImages as $file) { ?>
+        <img src="<?= $file->smallImg->url ?>" height="100" alt="" class="mr-3"/>
+    <?php } ?>
+</div>
+<br>
 <?php if ($dataProviderRequest) { ?>
     <div class="panel panel-default">
         <div class="panel-body">
@@ -171,7 +179,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'request_owner_id',
-                                'label' => 'Create request',
+                                'label'     => 'Create request',
                                 'value'     => static function (UserRequestPet $model) {
                                     return Html::a(
                                         $model->requestOwner->first_name . ' ' . $model->requestOwner->last_name,

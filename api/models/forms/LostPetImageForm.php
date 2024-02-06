@@ -4,8 +4,8 @@ namespace api\models\forms;
 
 use common\models\LostPet;
 use common\models\upload\LostPetImageMiddleUploadForm;
+use common\models\upload\LostPetImageSmallUploadForm;
 use common\models\upload\LostPetImageUploadForm;
-use common\models\upload\PetImageSmallUploadForm;
 use Throwable;
 use Yii;
 use yii\base\Model;
@@ -52,7 +52,7 @@ class LostPetImageForm extends Model
 
         $petImageUploadForm = new LostPetImageUploadForm();
         $petImageMiddleUploadForm = new LostPetImageMiddleUploadForm();
-        $petImageSmallUploadForm = new PetImageSmallUploadForm();
+        $petImageSmallUploadForm = new LostPetImageSmallUploadForm();
         $petImageUploadForm->loadInstance();
         if ($petImageUploadForm->validate() && $petImageUploadForm->upload()) {
             $petImageMiddleUploadForm->file = $petImageUploadForm->file;

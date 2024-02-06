@@ -4,9 +4,10 @@ namespace common\models\upload;
 
 class LostPetImageUploadForm extends UploadForm
 {
-    public $dir = 'lost-pet-image';
-    public $profile = 'lostPetImage';
+    public const DIR = 'lost-pet-image';
 
+    public $dir = self::DIR;
+    public $profile = 'lostPetImage';
 
     public function formName(): string
     {

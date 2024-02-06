@@ -16,7 +16,16 @@ use Yii;
  * @property string|null $file_source_url
  * @property string|null $created_at
  *
+ * @property LostPet[] $lostPets
+ * @property LostPet[] $lostPets0
+ * @property LostPet[] $lostPets1
+ * @property Pet[] $pets
+ * @property Pet[] $pets0
+ * @property Pet[] $pets1
+ * @property Review[] $reviews
+ * @property Review[] $reviews0
  * @property SiteUser[] $siteUsers
+ * @property SiteUser[] $siteUsers0
  */
 class _source_Files extends \yii\db\ActiveRecord
 {
@@ -62,6 +71,86 @@ class _source_Files extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[LostPets]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLostPets()
+    {
+        return $this->hasMany(LostPet::class, ['img_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[LostPets0]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLostPets0()
+    {
+        return $this->hasMany(LostPet::class, ['middle_img_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[LostPets1]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLostPets1()
+    {
+        return $this->hasMany(LostPet::class, ['small_img_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Pets]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPets()
+    {
+        return $this->hasMany(Pet::class, ['img_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Pets0]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPets0()
+    {
+        return $this->hasMany(Pet::class, ['middle_img_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Pets1]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPets1()
+    {
+        return $this->hasMany(Pet::class, ['small_img_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Reviews]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReviews()
+    {
+        return $this->hasMany(Review::class, ['pet_img_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Reviews0]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReviews0()
+    {
+        return $this->hasMany(Review::class, ['user_img_id' => 'id']);
+    }
+
+    /**
      * Gets query for [[SiteUsers]].
      *
      * @return \yii\db\ActiveQuery
@@ -69,5 +158,15 @@ class _source_Files extends \yii\db\ActiveRecord
     public function getSiteUsers()
     {
         return $this->hasMany(SiteUser::class, ['img_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[SiteUsers0]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSiteUsers0()
+    {
+        return $this->hasMany(SiteUser::class, ['small_img_id' => 'id']);
     }
 }
