@@ -49,15 +49,15 @@ class SiteController extends BaseController
         $lostPetsImages = Files::find()
             ->innerJoinWith(['lostPets1'])
             ->where(['dir' => [LostPetImageSmallUploadForm::DIR]])
-            ->orderBy('id desc')->limit(8)->all();
+            ->orderBy('id desc')->limit(16)->all();
         $petsImages = Files::find()
             ->innerJoinWith(['petSmallImages'])
             ->where(['dir' => [PetImageSmallUploadForm::DIR]])
-            ->orderBy('id desc')->limit(8)->all();
+            ->orderBy('id desc')->limit(16)->all();
         $profileImages = Files::find()
             ->innerJoinWith(['siteUsers0'])
             ->where(['dir' => [ProfileSmallPreviewUploadForm::DIR]])
-            ->orderBy('id desc')->limit(8)->all();
+            ->orderBy('id desc')->limit(16)->all();
 
         return $this->render(
             'index',
