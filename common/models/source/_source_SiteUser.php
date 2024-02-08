@@ -16,8 +16,8 @@ use Yii;
  * @property string|null $password_reset_token
  * @property string $email
  * @property int $status
- * @property string $created_at
- * @property string $updated_at
+ * @property string|null $created_at
+ * @property string|null $updated_at
  * @property string|null $verification_token
  * @property string|null $phone_number
  * @property string|null $about
@@ -57,7 +57,7 @@ class _source_SiteUser extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['username', 'first_name', 'auth_key', 'password_hash', 'email', 'created_at', 'updated_at'], 'required'],
+            [['username', 'first_name', 'auth_key', 'password_hash', 'email'], 'required'],
             [['status', 'img_id', 'small_img_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['about', 'my_location'], 'string'],
