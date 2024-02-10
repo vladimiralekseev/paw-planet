@@ -13,11 +13,9 @@ $verifyLink = 'https://' . Yii::$app->params['domainRoot'] . Url::to(
         ]
     );
 ?>
-Hello <?= trim($user->first_name . ' ' . $user->first_name) ?>,
+Hello <?= $user->fullName ?>,
 
-Token: <?= $user->verification_token ?>
-
-You can copy and past this token on the site or follow the link below to verify your email:
+Follow the link below to verify your email:
 
 <?= $verifyLink ?>
 
