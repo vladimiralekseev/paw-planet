@@ -32,7 +32,9 @@ use yii\web\View;
             and assist in finding lost pets.
         </p>
         <p>
-            <a style="color:#1c47b3;" href="mailto:contact@pawplanett.com">contact@pawplanett.com</a>
+            If you have any question contact us by email: <a style="color:#1c47b3;" href="mailto:contact@pawplanett
+            .com">contact@pawplanett.com</a>. We will try to answer you as soon as possible.<br />
+            Best regards, your Paw Planet team.
         </p>
         <div style="margin:20px 0 0;padding:20px 0 0;border-top:5px solid #1c47b3;"></div>
         <a style="color:#1c47b3;" href="https://<?=

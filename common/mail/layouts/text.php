@@ -11,5 +11,8 @@ use yii\web\View;
 <?php $this->beginPage() ?>
 <?php $this->beginBody() ?>
 <?= $content ?>
+
+The platform aims to connect people who share a passion for pets, facilitate joint pet walks, provide a space for discussions,
+and assist in finding lost pets.
 <?php $this->endBody() ?>
 <?php $this->endPage() ?>
