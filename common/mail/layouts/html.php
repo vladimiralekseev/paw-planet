@@ -20,10 +20,13 @@ use yii\web\View;
     <body style="background:#f9fafa;padding:20px;">
     <?php $this->beginBody() ?>
     <div style="margin:0 auto;max-width:600px;background:#fff;padding:20px;">
-        <div style="text-align:center;margin:0 0 20px;padding:0 0 20px;border-bottom:5px solid #1c47b3;">
+        <div style="color:#1c47b3;text-align:center;margin:0 0 20px;padding:0 0 20px;border-bottom:5px solid #1c47b3;font-size:30px;font-weight:bold;">
+            PAW PLANET
+<?php /*?>
             <a style="color:#1c47b3;" href="https://<?= Yii::$app->params['domainRoot'] ?>">
                 <img src="https://<?= Yii::$app->params['domain'] ?>/img/paw-planet-logo.png" alt="Paw Planet">
             </a>
+ <?php */?>
         </div>
         <?= $content ?>
         <div style="margin:20px 0 0;border-top:2px solid #1c47b3;"></div>
