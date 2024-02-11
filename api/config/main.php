@@ -13,6 +13,7 @@ $params = array_merge(
 
 return [
     'id' => 'app-api',
+    'name' => 'Paw Planet',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'api\controllers',
