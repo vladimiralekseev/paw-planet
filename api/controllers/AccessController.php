@@ -12,6 +12,13 @@ class AccessController extends BaseController
         $behaviors['authenticator'] = [
             'class' => HttpBearerAuth::class,
         ];
+
+        $auth = $behaviors['authenticator'];
+        unset($behaviors['authenticator']);
+
+        $behaviors['authenticator'] = $auth;
+        // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
+        $behaviors['authenticator']['except'] = ['options'];
         return $behaviors;
     }
 }

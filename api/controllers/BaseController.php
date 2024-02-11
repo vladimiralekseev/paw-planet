@@ -14,12 +14,6 @@ class BaseController extends Controller
     {
         $behaviors = parent::behaviors();
 
-        $behaviors['contentNegotiator'] = [
-            'class'   => ContentNegotiator::class,
-            'formats' => [
-                'application/json' => Response::FORMAT_JSON,
-            ],
-        ];
         if (Yii::$app->params['corsOrigin']) {
             $behaviors['corsFilter'] = [
                 'class' => Cors::class,
@@ -28,6 +22,13 @@ class BaseController extends Controller
                 ],
             ];
         }
+
+        $behaviors['contentNegotiator'] = [
+            'class'   => ContentNegotiator::class,
+            'formats' => [
+                'application/json' => Response::FORMAT_JSON,
+            ],
+        ];
 
         return $behaviors;
     }
