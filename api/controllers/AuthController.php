@@ -184,74 +184,22 @@ class AuthController extends BaseController
     /**
      * Verify a email.
      *
-     * @OA\Get(
-     *     path="/auth/verify-email/",
-     *     tags={"Auth"},
-     *     @OA\Parameter(
-     *          name="token",
-     *          in="query",
-     *          @OA\Schema(
-     *              type="string",
-     *          ),
-     *          style="form"
-     *     ),
-     *     @OA\Response(
-     *         response="200",
-     *         description="The data",
-     *         content={
-     *             @OA\MediaType(
-     *                 mediaType="application/json",
-     *                 @OA\Schema(
-     *                     @OA\Property(
-     *                         property="name",
-     *                         type="string"
-     *                     ),
-     *                     @OA\Property(
-     *                         property="status",
-     *                         type="integer"
-     *                     ),
-     *                     @OA\Property(
-     *                         property="code",
-     *                         type="integer"
-     *                     ),
-     *                     @OA\Property(
-     *                         property="message",
-     *                         type="string"
-     *                     ),
-     *                     example={
-     *                         "name": "Success",
-     *                         "status": 200,
-     *                         "code": 0,
-     *                         "message": "Your email has been confirmed!"
-     *                     }
-     *                 )
-     *             )
-     *         }
-     *     )
-     * )
-     *
      * @param string $token
      *
-     * @return array
-     * @throws BadRequestHttpException
+     * @return Response
      */
-    public function actionVerifyEmail($token)
+    public function actionVerifyEmail($token): Response
     {
+        $model = null;
         try {
             $model = new VerifyEmailForm($token);
         } catch (InvalidArgumentException $e) {
-            throw new BadRequestHttpException($e->getMessage());
+            return $this->redirect('https://' . Yii::$app->params['domainRoot'] . '/?email_validation=false');
         }
-        if (($user = $model->verifyEmail()) && Yii::$app->user->login($user)) {
-            return $this->successResponse(
-                'Your email has been confirmed!'
-            );
+        if ($model && ($user = $model->verifyEmail()) && Yii::$app->user->login($user)) {
+            return $this->redirect('https://' . Yii::$app->params['domainRoot'] . '/?email_validation=true');
         }
-        if ($errors = $model->getErrorSummary(true)) {
-            throw new BadRequestHttpException(array_shift($errors));
-        }
-
-        throw new BadRequestHttpException('Sorry, we are unable to verify your account with provided token.');
+        return $this->redirect('https://' . Yii::$app->params['domainRoot'] . '/?email_validation=false');
     }
 
     /**

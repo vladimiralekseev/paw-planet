@@ -6,9 +6,9 @@
 use yii\helpers\Url;
 
 //$verifyLink = 'https://' . Yii::$app->params['domainRoot'] . Url::to(['auth/verify-email', 'token' => $user->verification_token]);
-$verifyLink = 'https://' . Yii::$app->params['domainRoot'] . Url::to(
+$verifyLink = 'https://' . Yii::$app->params['domain'] . Url::to(
         [
-            'site/index',
+            'auth/verify-email',
             'token' => $user->verification_token
         ]
     );
@@ -19,4 +19,4 @@ Follow the link below to verify your email:
 
 <?= $verifyLink ?>
 
-Ignore this email if you didn't register on <?= Yii::$app->params['domainRoot'] ?>
+Ignore this email if you don't register on <?= Yii::$app->params['domainRoot'] ?>
