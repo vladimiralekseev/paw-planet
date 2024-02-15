@@ -77,6 +77,9 @@ class Pet extends _source_Pet
                         $model->petAvailables
                     );
                 },
+                'status_name' => static function (Pet $model) {
+                    return self::getStatusValue($model->status);
+                }
             ]
         );
         unset($arr['breed_id'], $arr['user_id'], $arr['img_id'], $arr['middle_img_id'], $arr['small_img_id']);
