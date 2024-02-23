@@ -27,6 +27,7 @@ class SiteUserPublic extends SiteUser
             'small_img'   => static function ($model) {
                 return $model->smallImg ? $model->smallImg->url : null;
             },
+            'my_location',
             'updated_at',
             'created_at',
         ];

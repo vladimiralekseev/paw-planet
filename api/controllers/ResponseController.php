@@ -4,10 +4,7 @@ namespace api\controllers;
 
 use api\models\forms\ResponseLostPetForm;
 use api\models\forms\ResponseLostPetStatusForm;
-use api\models\forms\UserRequestPetForm;
-use api\models\forms\UserRequestPetStatusForm;
 use common\models\ResponseLostPet;
-use common\models\UserRequestPet;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
