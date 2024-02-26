@@ -9,7 +9,7 @@ use Yii;
 use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
 
-class RequestController extends AccessController
+class RequestsController extends AccessController
 {
     public function behaviors(): array
     {
@@ -33,7 +33,7 @@ class RequestController extends AccessController
      * Requests to me
      *
      * @OA\Get(
-     *     path="/request/to-me/",
+     *     path="/requests/to-me/",
      *     security={{"bearerAuth":{}}},
      *     tags={"Requests"},
      *     @OA\SecurityScheme(
@@ -86,7 +86,7 @@ class RequestController extends AccessController
      * Requests from me
      *
      * @OA\Get(
-     *     path="/request/from-me/",
+     *     path="/requests/from-me/",
      *     security={{"bearerAuth":{}}},
      *     tags={"Requests"},
      *     @OA\SecurityScheme(
@@ -133,7 +133,7 @@ class RequestController extends AccessController
      * Create a request
      *
      * @OA\Post(
-     *     path="/request/create/",
+     *     path="/requests/create/",
      *     security={{"bearerAuth":{}}},
      *     tags={"Requests"},
      *     @OA\SecurityScheme(
@@ -221,7 +221,7 @@ class RequestController extends AccessController
      * Change a request status
      *
      * @OA\Patch(
-     *     path="/request/{id}/status/{status}/",
+     *     path="/requests/{id}/status/{status}/",
      *     security={{"bearerAuth":{}}},
      *     tags={"Requests"},
      *     @OA\SecurityScheme(

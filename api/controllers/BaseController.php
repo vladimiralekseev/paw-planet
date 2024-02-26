@@ -18,7 +18,10 @@ class BaseController extends Controller
             $behaviors['corsFilter'] = [
                 'class' => Cors::class,
                 'cors'  => [
-                    'Origin' => Yii::$app->params['corsOrigin'],
+                    'Origin'                        => Yii::$app->params['corsOrigin'],
+                    'Access-Control-Request-Method' => ['*'],
+                    'Access-Control-Allow-Headers'  => ['*'],
+                    'Access-Control-Expose-Headers' => ['*']
                 ],
             ];
         }
@@ -36,9 +39,9 @@ class BaseController extends Controller
     public function successResponse($message = null, $data = null, $dataName = 'data'): array
     {
         $result = [
-            'name' => 'Success',
+            'name'   => 'Success',
             'status' => 200,
-            'code' => 0,
+            'code'   => 0,
         ];
         if ($message) {
             $result['message'] = $message;
