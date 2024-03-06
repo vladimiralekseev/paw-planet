@@ -102,6 +102,15 @@ class LostPetPublicController extends BaseController
      *          style="form"
      *     ),
      *     @OA\Parameter(
+     *         description="Date yyyy-mm-dd (e.g.: 2024-01-18 will be search from 2024-01-15 to 2024-01-21)",
+     *          name="date",
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string",
+     *          ),
+     *          style="form"
+     *     ),
+     *     @OA\Parameter(
      *          name="age_from",
      *          in="query",
      *          @OA\Schema(
