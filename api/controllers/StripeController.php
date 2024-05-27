@@ -14,9 +14,9 @@ class StripeController extends BaseController
                 'verbs' => [
                     'class'   => VerbFilter::class,
                     'actions' => [
-                        'customer'              => ['get'],
-                        'customer-subscription' => ['get'],
-                        'billing-portal'        => ['get'],
+                        'customer'              => ['post'],
+                        'customer-subscription' => ['post'],
+                        'billing-portal'        => ['post'],
                     ],
                 ],
             ]
