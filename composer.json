@@ -36,7 +36,8 @@
         "guzzlehttp/guzzle" : "*",
         "ext-json": "*",
         "zircote/swagger-php": "*",
-        "doctrine/annotations": "*"
+        "doctrine/annotations": "*",
+        "stripe/stripe-php": "^14.8"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "*",

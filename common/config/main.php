@@ -92,9 +92,9 @@ return [
             ],
         ],
     ],
-    'modules'    => [
-        'user-management' => [
-            'class' => UserManagementModule::class,
-        ],
-    ],
+//    'modules'    => [
+//        'user-management' => [
+//            'class' => UserManagementModule::class,
+//        ],
+//    ],
 ];
