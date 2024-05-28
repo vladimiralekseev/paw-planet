@@ -10,9 +10,9 @@ use yii\db\StaleObjectException;
 
 class Pet extends _source_Pet
 {
-    const STATUS_ACTIVE   = 1;
-    const STATUS_INACTIVE = 2;
-    const STATUS_BLOCKED  = 3;
+    public const STATUS_ACTIVE   = 1;
+    public const STATUS_INACTIVE = 2;
+    public const STATUS_BLOCKED  = 3;
 
     /**
      * @return bool

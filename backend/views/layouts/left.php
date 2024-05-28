@@ -35,6 +35,10 @@ use yii\widgets\Menu;
                 'label' => '<span class="fa fa-commenting"></span> ' . 'Reviews',
                 'url'   => ['/review']
             ],
+            [
+                'label' => '<span class="fa fa-commenting"></span> ' . 'Product',
+                'url'   => ['/product']
+            ],
             ['label' => 'Settings', 'options' => ['class' => 'header']],
             [
                 'label' => '<span class="fa fa-dashboard"></span> ' . 'Change own password',
