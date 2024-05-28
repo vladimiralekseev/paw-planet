@@ -37,4 +37,9 @@ class StripeController extends BaseController
     {
         return ['result' => 'ok'];
     }
+
+    public function actionSubscriptionSchedule(): array
+    {
+        return ['result' => 'ok'];
+    }
 }
