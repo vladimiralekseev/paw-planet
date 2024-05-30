@@ -32,13 +32,18 @@ use Yii;
  * @property string|null $state
  * @property string|null $city
  * @property string|null $address
+ * @property string|null $stripe_customer_id
+ * @property int|null $product_id
+ * @property string|null $product_expired_date
  *
  * @property Files $img
  * @property LostPet[] $lostPets
  * @property Pet[] $pets
+ * @property Product $product
  * @property ResponseLostPet[] $responseLostPets
  * @property SiteUserToken[] $siteUserTokens
  * @property Files $smallImg
+ * @property StripeLog[] $stripeLogs
  * @property UserRequestPet[] $userRequestPets
  */
 class _source_SiteUser extends \yii\db\ActiveRecord
@@ -58,19 +63,20 @@ class _source_SiteUser extends \yii\db\ActiveRecord
     {
         return [
             [['username', 'first_name', 'auth_key', 'password_hash', 'email'], 'required'],
-            [['status', 'img_id', 'small_img_id'], 'integer'],
-            [['created_at', 'updated_at'], 'safe'],
+            [['status', 'img_id', 'small_img_id', 'product_id'], 'integer'],
+            [['created_at', 'updated_at', 'product_expired_date'], 'safe'],
             [['about', 'my_location'], 'string'],
             [['latitude', 'longitude'], 'number'],
             [['username', 'password_hash', 'password_reset_token', 'email', 'verification_token'], 'string', 'max' => 255],
             [['first_name', 'last_name', 'address'], 'string', 'max' => 128],
             [['auth_key'], 'string', 'max' => 32],
-            [['phone_number', 'country', 'state', 'city'], 'string', 'max' => 64],
+            [['phone_number', 'country', 'state', 'city', 'stripe_customer_id'], 'string', 'max' => 64],
             [['whats_app', 'facebook'], 'string', 'max' => 256],
             [['username'], 'unique'],
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
             [['img_id'], 'exist', 'skipOnError' => true, 'targetClass' => Files::class, 'targetAttribute' => ['img_id' => 'id']],
+            [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::class, 'targetAttribute' => ['product_id' => 'id']],
             [['small_img_id'], 'exist', 'skipOnError' => true, 'targetClass' => Files::class, 'targetAttribute' => ['small_img_id' => 'id']],
         ];
     }
@@ -106,6 +112,9 @@ class _source_SiteUser extends \yii\db\ActiveRecord
             'state' => 'State',
             'city' => 'City',
             'address' => 'Address',
+            'stripe_customer_id' => 'Stripe Customer ID',
+            'product_id' => 'Product ID',
+            'product_expired_date' => 'Product Expired Date',
         ];
     }
 
@@ -140,6 +149,16 @@ class _source_SiteUser extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Product]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProduct()
+    {
+        return $this->hasOne(Product::class, ['id' => 'product_id']);
+    }
+
+    /**
      * Gets query for [[ResponseLostPets]].
      *
      * @return \yii\db\ActiveQuery
@@ -167,6 +186,16 @@ class _source_SiteUser extends \yii\db\ActiveRecord
     public function getSmallImg()
     {
         return $this->hasOne(Files::class, ['id' => 'small_img_id']);
+    }
+
+    /**
+     * Gets query for [[StripeLogs]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getStripeLogs()
+    {
+        return $this->hasMany(StripeLog::class, ['site_user_id' => 'id']);
     }
 
     /**

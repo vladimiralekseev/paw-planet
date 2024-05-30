@@ -5,7 +5,7 @@ namespace api\controllers;
 use common\models\Product;
 use yii\filters\VerbFilter;
 
-class ProductController extends BaseController
+class ProductPublicController extends BaseController
 {
     public function behaviors(): array
     {

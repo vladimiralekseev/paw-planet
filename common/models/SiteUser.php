@@ -2,6 +2,9 @@
 
 namespace common\models;
 
+use Stripe\Checkout\Session;
+use Stripe\Customer;
+use Stripe\Exception\ApiErrorException;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -66,13 +69,13 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
             'whats_app',
             'facebook',
             'status',
-            'status_name' => static function($model) {
+            'status_name' => static function ($model) {
                 return self::getStatusValue($model->status);
             },
-            'img' => static function($model) {
+            'img'         => static function ($model) {
                 return $model->img ? $model->img->url : null;
             },
-            'small_img' => static function($model) {
+            'small_img'   => static function ($model) {
                 return $model->smallImg ? $model->smallImg->url : null;
             },
             'updated_at',
@@ -121,12 +124,14 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
      * Finds user by username
      *
      * @param string $username
+     *
      * @return static|null
      */
     public static function findByUsername($username): ?SiteUser
     {
         return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
+
     public static function findByEmail($email): ?SiteUser
     {
         return static::findOne(['email' => $email, 'status' => self::STATUS_ACTIVE]);
@@ -136,6 +141,7 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
      * Finds user by password reset token
      *
      * @param string $token password reset token
+     *
      * @return static|null
      */
     public static function findByPasswordResetToken($token): ?SiteUser
@@ -144,30 +150,36 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
             return null;
         }
 
-        return static::findOne([
-            'password_reset_token' => $token,
-            'status' => self::STATUS_ACTIVE,
-        ]);
+        return static::findOne(
+            [
+                'password_reset_token' => $token,
+                'status'               => self::STATUS_ACTIVE,
+            ]
+        );
     }
 
     /**
      * Finds user by verification email token
      *
      * @param string $token verify email token
+     *
      * @return static|null
      */
     public static function findByVerificationToken($token): ?SiteUser
     {
-        return static::findOne([
-            'verification_token' => $token,
-            'status' => self::STATUS_INACTIVE
-        ]);
+        return static::findOne(
+            [
+                'verification_token' => $token,
+                'status'             => self::STATUS_INACTIVE
+            ]
+        );
     }
 
     /**
      * Finds out if password reset token is valid
      *
      * @param string $token password reset token
+     *
      * @return bool
      */
     public static function isPasswordResetTokenValid($token): bool
@@ -176,7 +188,7 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
             return false;
         }
 
-        $timestamp = (int) substr($token, strrpos($token, '_') + 1);
+        $timestamp = (int)substr($token, strrpos($token, '_') + 1);
         $expire = Yii::$app->params['user.passwordResetTokenExpire'];
         return $timestamp + $expire >= time();
     }
@@ -209,6 +221,7 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
      * Validates password
      *
      * @param string $password password to validate
+     *
      * @return bool if password provided is valid for current user
      */
     public function validatePassword($password)
@@ -266,5 +279,25 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
     public function getFullName(): string
     {
         return trim($this->first_name . ' ' . $this->last_name);
+    }
+
+    /**
+     * @return Customer
+     * @throws ApiErrorException
+     */
+    public function stripeUpdate(): Customer
+    {
+        return (new Stripe())->saveCustomer($this);
+    }
+
+    /**
+     * @param Product $product
+     *
+     * @return Session
+     * @throws ApiErrorException
+     */
+    public function generateCheckoutSessions(Product $product): Session
+    {
+        return (new Stripe())->generateCheckoutSessions($this, $product);
     }
 }

@@ -1,8 +1,10 @@
 <?php
 
 use common\models\SiteUser;
+use yii\log\FileTarget;
 use yii\web\JsonResponseFormatter;
 use yii\web\JsonParser;
+use yii\web\Response;
 
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
@@ -29,7 +31,7 @@ return [
         'response' => [
             'format' => yii\web\Response::FORMAT_JSON,
             'formatters' => [
-                \yii\web\Response::FORMAT_JSON => [
+                Response::FORMAT_JSON => [
                     'class' => JsonResponseFormatter::class,
                     'prettyPrint' => YII_DEBUG,
                 ],
@@ -68,7 +70,7 @@ return [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
                 [
-                    'class' => \yii\log\FileTarget::class,
+                    'class' => FileTarget::class,
                     'levels' => ['error', 'warning'],
                 ],
             ],
@@ -107,6 +109,7 @@ return [
                 '/pet-images/delete/<pet_image_id:[\d]+>/'      => 'pet-images/delete',
                 '/pet-images/set-as-main/<pet_image_id:[\d]+>/' => 'pet-images/set-as-main',
                 '/pet/breeds/'                                  => 'breed/index',
+                '/product/list/'                                => 'product-public/list',
                 '/requests/<id:[\d]+>/status/<status:[\w]+>/'   => 'requests/status',
                 '/response/<id:[\d]+>/status/<status:[\w]+>/'   => 'response/status',
                 '/colors/'                                      => 'color/list',
