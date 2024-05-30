@@ -6,6 +6,7 @@ use common\models\SiteUser;
 use common\models\StripeLog;
 use Yii;
 use yii\filters\VerbFilter;
+use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
 
 class StripeController extends BaseController
@@ -39,7 +40,7 @@ class StripeController extends BaseController
     {
         $stripeLog = new StripeLog(
             [
-                'data'         => $data,
+                'data'         => Json::encode($data),
                 'site_user_id' => $user_id,
                 'event'        => $event,
             ]
