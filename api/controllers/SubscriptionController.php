@@ -55,7 +55,7 @@ class SubscriptionController extends AccessController
      *     ),
      *     @OA\Response(
      *         response="200",
-     *         description="See docs.stripe.com",
+     *         description="See https://docs.stripe.com/api/checkout/sessions/object",
      *         @OA\Link(
      *          link="https://docs.stripe.com/api/checkout/sessions/object"
      *         )
