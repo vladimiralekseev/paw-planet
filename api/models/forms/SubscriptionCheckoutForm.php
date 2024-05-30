@@ -60,6 +60,14 @@ class SubscriptionCheckoutForm extends Model
         $product = Product::find()->where(['id' => $this->product_id])->one();
 
         try {
+            $user->stripeUpdate();
+            $user->refresh();
+        } catch (ApiErrorException $e) {
+            $this->addError('stripe', $e->getMessage());
+            return false;
+        }
+
+        try {
             $this->response = $user->generateCheckoutSessions($product);
             return true;
         } catch (ApiErrorException $e) {
