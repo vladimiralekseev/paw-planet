@@ -2,6 +2,7 @@
 
 namespace api\controllers;
 
+use api\models\forms\SubscriptionCancelForm;
 use api\models\forms\SubscriptionCheckoutForm;
 use common\models\SiteUser;
 use Yii;
@@ -74,6 +75,54 @@ class SubscriptionController extends AccessController
         $subscriptionCheckoutForm->load(Yii::$app->request->post());
         $subscriptionCheckoutForm->user_id = $user->id;
         if ($subscriptionCheckoutForm->generate()) {
+            return $this->successResponse(
+                'Request has created!',
+                $subscriptionCheckoutForm->getResponse()
+            );
+        }
+        if ($errors = $subscriptionCheckoutForm->getErrorSummary(true)) {
+            throw new BadRequestHttpException(array_shift($errors));
+        }
+
+        throw new BadRequestHttpException('Undefined error');
+    }
+
+    /**
+     * Subscription cancel
+     *
+     * @OA\Post(
+     *     path="/subscription/cancel/",
+     *     security={{"bearerAuth":{}}},
+     *     tags={"Subscription"},
+     *     @OA\SecurityScheme(
+     *          securityScheme="bearerAuth",
+     *          in="header",
+     *          name="bearerAuth",
+     *          type="http",
+     *          scheme="bearer",
+     *          bearerFormat="JWT",
+     *      ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="See https://docs.stripe.com/api/subscriptions/cancel",
+     *         @OA\Link(
+     *          link="https://docs.stripe.com/api/subscriptions/cancel"
+     *         )
+     *     )
+     * )
+     *
+     * @return array
+     * @throws BadRequestHttpException
+     */
+    public function actionCancel(): array
+    {
+        /** @var SiteUser $user */
+        $user = Yii::$app->user->identity;
+
+        $subscriptionCheckoutForm = new SubscriptionCancelForm();
+        $subscriptionCheckoutForm->load(Yii::$app->request->post());
+        $subscriptionCheckoutForm->user_id = $user->id;
+        if ($subscriptionCheckoutForm->cancelSubscription()) {
             return $this->successResponse(
                 'Request has created!',
                 $subscriptionCheckoutForm->getResponse()

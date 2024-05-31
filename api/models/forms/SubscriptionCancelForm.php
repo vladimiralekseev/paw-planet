@@ -2,19 +2,17 @@
 
 namespace api\models\forms;
 
-use common\models\Product;
 use common\models\SiteUser;
+use common\models\Stripe;
 use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
 use yii\base\Model;
 
 /**
- * @property int $product_id
  * @property int $user_id
  */
-class SubscriptionCheckoutForm extends Model
+class SubscriptionCancelForm extends Model
 {
-    public $product_id;
     public $user_id;
 
     private $response;
@@ -27,14 +25,6 @@ class SubscriptionCheckoutForm extends Model
     public function rules(): array
     {
         return [
-            [['product_id'], 'required'],
-            [
-                ['product_id'],
-                'exist',
-                'skipOnError'     => true,
-                'targetClass'     => Product::class,
-                'targetAttribute' => ['product_id' => 'id']
-            ],
             [
                 ['user_id'],
                 'exist',
@@ -48,7 +38,7 @@ class SubscriptionCheckoutForm extends Model
     /**
      * @return bool
      */
-    public function generate(): bool
+    public function cancelSubscription(): bool
     {
         if (!$this->validate()) {
             return false;
@@ -56,25 +46,20 @@ class SubscriptionCheckoutForm extends Model
 
         /** @var SiteUser $user */
         $user = SiteUser::find()->where(['id' => $this->user_id])->one();
-        /** @var Product $product */
-        $product = Product::find()->where(['id' => $this->product_id])->one();
 
-        if ($user->product_id) {
-            $this->addError('stripe', 'You should cancel the current subscription');
+        if (!$user->product_id) {
+            $this->addError('stripe', 'You have not subscription');
             return false;
         }
 
         try {
-            $user->stripeUpdate();
-            $user->refresh();
-        } catch (ApiErrorException $e) {
-            $this->addError('stripe', $e->getMessage());
-            return false;
-        }
+            $stripe = new Stripe();
+            if ($this->response = $stripe->cancelSubscription($user)) {
+                return true;
+            }
+            $this->addError('stripe', 'Subscription is not found');
 
-        try {
-            $this->response = $user->generateCheckoutSessions($product);
-            return true;
+            return false;
         } catch (ApiErrorException $e) {
             $this->addError('stripe', $e->getMessage());
             return false;

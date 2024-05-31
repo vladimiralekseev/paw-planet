@@ -5,8 +5,9 @@ namespace common\models;
 use Stripe\Checkout\Session;
 use Stripe\Customer;
 use Stripe\Exception\ApiErrorException;
-use Stripe\Price;
 use Stripe\StripeClient;
+use Stripe\Subscription;
+use Stripe\SubscriptionItem;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
@@ -36,9 +37,9 @@ class Stripe extends Model
             'email'   => $user->email,
             'phone'   => $user->phone_number,
             'address' => [
-                'city'        => $user->city,
-                'state'       => $user->state,
-                'line1'       => $user->address,
+                'city'  => $user->city,
+                'state' => $user->state,
+                'line1' => $user->address,
             ],
         ];
     }
@@ -80,8 +81,9 @@ class Stripe extends Model
     {
         $stripeProduct = $this->getProduct($product->stripe_product_id);
 
-        return $this->stripeClient->checkout->sessions->create([
-                'customer'   => $user->stripe_customer_id,
+        return $this->stripeClient->checkout->sessions->create(
+            [
+                'customer'    => $user->stripe_customer_id,
                 'success_url' => 'https://example.com/success.html?session_id={CHECKOUT_SESSION_ID}',
                 'cancel_url'  => 'https://example.com/canceled.html',
                 'mode'        => 'subscription',
@@ -108,13 +110,42 @@ class Stripe extends Model
     }
 
     /**
-     * @param $id
+     * @param SiteUser $user
      *
-     * @return Price
+     * @return Subscription|null
      * @throws ApiErrorException
      */
-    public function getPrice($id): Price
+    public function getSubscription(SiteUser $user): ?Subscription
     {
-        return $this->stripeClient->prices->retrieve($id, []);
+        $collection = $this->stripeClient->subscriptions->all(
+            [
+                'customer' => $user->stripe_customer_id
+            ]
+        );
+        /** @var Subscription $subscription */
+        foreach ($collection->data as $subscription) {
+            /** @var SubscriptionItem $subscriptionItem */
+            foreach ($subscription->items->data as $subscriptionItem) {
+                if ($subscriptionItem->plan->product === $user->product->stripe_product_id) {
+                    return $subscription;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param SiteUser $user
+     *
+     * @return Subscription|null
+     * @throws ApiErrorException
+     */
+    public function cancelSubscription(SiteUser $user): ?Subscription
+    {
+        $subscription = $this->getSubscription($user);
+        if (!$subscription) {
+            return null;
+        }
+        return $this->stripeClient->subscriptions->cancel($subscription->id, []);
     }
 }
