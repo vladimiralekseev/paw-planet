@@ -36,7 +36,7 @@ class StripeController extends BaseController
      * @return string[]
      * @throws BadRequestHttpException
      */
-    private function progressLog($user, $data): array
+    private function processLog($user, $data): array
     {
         $stripeLog = new StripeLog(
             [
@@ -72,7 +72,7 @@ class StripeController extends BaseController
             throw new BadRequestHttpException('User is not found');
         }
 
-        return $this->progressLog(
+        return $this->processLog(
             $user,
             $request->bodyParams
         );
@@ -108,15 +108,15 @@ class StripeController extends BaseController
             $prod = Product::find()->where(['stripe_product_id' => $object['plan']['product']])->one();
 
             if ($prod) {
-                if ($user->product_id && $user->product_id !== $prod->id) {
-                    // add cancel subscription
-                }
                 $user->product_id = $prod->id;
                 $user->save(false);
             }
+        } else if ($request->bodyParams['type'] === StripeLog::TYPE_CUSTOMER_SUBSCRIPTION_DELETED) {
+            $user->product_id = null;
+            $user->save(false);
         }
 
-        return $this->progressLog(
+        return $this->processLog(
             $user,
             $request->bodyParams
         );
