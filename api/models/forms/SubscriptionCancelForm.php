@@ -6,6 +6,7 @@ use common\models\SiteUser;
 use common\models\Stripe;
 use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
+use Stripe\Subscription;
 use yii\base\Model;
 
 /**
@@ -66,7 +67,10 @@ class SubscriptionCancelForm extends Model
         }
     }
 
-    public function getResponse(): Session
+    /**
+     * @return Subscription|null
+     */
+    public function getResponse(): ?Subscription
     {
         return $this->response;
     }

@@ -81,7 +81,10 @@ class SubscriptionCheckoutForm extends Model
         }
     }
 
-    public function getResponse(): Session
+    /**
+     * @return Session|null
+     */
+    public function getResponse(): ?Session
     {
         return $this->response;
     }
