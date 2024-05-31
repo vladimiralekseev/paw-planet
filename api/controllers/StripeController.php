@@ -85,20 +85,27 @@ class StripeController extends BaseController
     public function actionCustomerSubscription(): array
     {
         $request = Yii::$app->request;
+        $object = null;
 
-        if (empty($request->bodyParams['data']['object']['customer'])) {
+        if (empty($request->bodyParams['data']['object'])) {
+            throw new BadRequestHttpException('Stripe Object is not found');
+        }
+
+        $object = $request->bodyParams['data']['object'];
+
+        if (empty($object['customer'])) {
             throw new BadRequestHttpException('Stripe customer Id is not found');
         }
 
         /** @var SiteUser $user */
-        $user = SiteUser::find()->where(['stripe_customer_id' => $request->bodyParams['data']['object']['customer']])->one();
+        $user = SiteUser::find()->where(['stripe_customer_id' => $object['customer']])->one();
         if (!$user) {
             throw new BadRequestHttpException('User is not found');
         }
 
         if ($request->bodyParams['type'] === StripeLog::TYPE_CUSTOMER_SUBSCRIPTION_CREATED) {
             /** @var Product $prod */
-            $prod = Product::find()->where(['stripe_product_id' => $request->bodyParams['plan']['product']]);
+            $prod = Product::find()->where(['stripe_product_id' => $object['plan']['product']]);
 
             if ($prod) {
                 if ($user->product_id && $user->product_id !== $prod->id) {
