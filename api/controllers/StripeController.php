@@ -91,7 +91,7 @@ class StripeController extends BaseController
         }
 
         /** @var SiteUser $user */
-        $user = SiteUser::find()->where(['stripe_customer_id' => $request->bodyParams['data']['object']['id']])->one();
+        $user = SiteUser::find()->where(['stripe_customer_id' => $request->bodyParams['data']['object']['customer']])->one();
         if (!$user) {
             throw new BadRequestHttpException('User is not found');
         }
