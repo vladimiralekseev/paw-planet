@@ -73,7 +73,7 @@ class StripeController extends BaseController
         }
 
         return $this->progressLog(
-            $request->bodyParams['id'],
+            $request->bodyParams['type'],
             $user->id,
             $request->bodyParams
         );

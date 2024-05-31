@@ -39,6 +39,11 @@ use yii\widgets\Menu;
                 'label' => '<span class="fa fa-commenting"></span> ' . 'Product',
                 'url'   => ['/product']
             ],
+            ['label' => 'Stripe', 'options' => ['class' => 'header']],
+            [
+                'label' => '<span class="fa fa-dashboard"></span> ' . 'Stripe Events',
+                'url'   => ['/stripe-log']
+            ],
             ['label' => 'Settings', 'options' => ['class' => 'header']],
             [
                 'label' => '<span class="fa fa-dashboard"></span> ' . 'Change own password',
