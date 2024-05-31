@@ -105,7 +105,7 @@ class StripeController extends BaseController
 
         if ($request->bodyParams['type'] === StripeLog::TYPE_CUSTOMER_SUBSCRIPTION_CREATED) {
             /** @var Product $prod */
-            $prod = Product::find()->where(['stripe_product_id' => $object['plan']['product']]);
+            $prod = Product::find()->where(['stripe_product_id' => $object['plan']['product']])->one();
 
             if ($prod) {
                 if ($user->product_id && $user->product_id !== $prod->id) {
