@@ -63,7 +63,7 @@ class Stripe extends Model
                 self::customerData($user)
             );
             if ($customer) {
-                $user->stripe_customer_id = $customer['id'];
+                $user->stripe_customer_id = $customer->id;
                 $user->save(false);
             }
         }
@@ -84,12 +84,12 @@ class Stripe extends Model
         return $this->stripeClient->checkout->sessions->create(
             [
                 'customer'    => $user->stripe_customer_id,
-                'success_url' => 'https://example.com/success.html?session_id={CHECKOUT_SESSION_ID}',
-                'cancel_url'  => 'https://example.com/canceled.html',
+                'success_url' => 'https://' . Yii::$app->params['domainRoot'] . '/payment-success/?session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url'  => 'https://' . Yii::$app->params['domainRoot'] . '/payment-canceled/',
                 'mode'        => 'subscription',
                 'line_items'  => [
                     [
-                        'price'    => $stripeProduct['default_price'],
+                        'price'    => $stripeProduct->default_price,
                         // For metered billing, do not pass quantity
                         'quantity' => 1,
                     ]
