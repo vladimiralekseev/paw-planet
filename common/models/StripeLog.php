@@ -8,6 +8,8 @@ use yii\db\Expression;
 
 class StripeLog extends _source_StripeLog
 {
+    public const TYPE_CUSTOMER_SUBSCRIPTION_CREATED = 'customer.subscription.created';
+
     public function behaviors(): array
     {
         return [

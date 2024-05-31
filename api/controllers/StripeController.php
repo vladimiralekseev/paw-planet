@@ -2,6 +2,7 @@
 
 namespace api\controllers;
 
+use common\models\Product;
 use common\models\SiteUser;
 use common\models\StripeLog;
 use Yii;
@@ -29,20 +30,19 @@ class StripeController extends BaseController
     }
 
     /**
-     * @param $event
-     * @param $user_id
+     * @param $user
      * @param $data
      *
      * @return string[]
      * @throws BadRequestHttpException
      */
-    private function progressLog($event, $user_id, $data): array
+    private function progressLog($user, $data): array
     {
         $stripeLog = new StripeLog(
             [
                 'data'         => Json::encode($data),
-                'site_user_id' => $user_id,
-                'event'        => $event,
+                'site_user_id' => $user->id,
+                'event'        => $data['type'],
             ]
         );
         if ($stripeLog->save()) {
@@ -64,7 +64,7 @@ class StripeController extends BaseController
         $request = Yii::$app->request;
 
         if (empty($request->bodyParams['data']['object']['id'])) {
-            throw new BadRequestHttpException('Stripe user Id is not found');
+            throw new BadRequestHttpException('Stripe customer Id is not found');
         }
         /** @var SiteUser $user */
         $user = SiteUser::find()->where(['stripe_customer_id' => $request->bodyParams['data']['object']['id']])->one();
@@ -73,15 +73,46 @@ class StripeController extends BaseController
         }
 
         return $this->progressLog(
-            $request->bodyParams['type'],
-            $user->id,
+            $user,
             $request->bodyParams
         );
     }
 
+    /**
+     * @return string[]
+     * @throws BadRequestHttpException
+     */
     public function actionCustomerSubscription(): array
     {
-        return ['result' => 'ok'];
+        $request = Yii::$app->request;
+
+        if (empty($request->bodyParams['data']['object']['customer'])) {
+            throw new BadRequestHttpException('Stripe customer Id is not found');
+        }
+
+        /** @var SiteUser $user */
+        $user = SiteUser::find()->where(['stripe_customer_id' => $request->bodyParams['data']['object']['id']])->one();
+        if (!$user) {
+            throw new BadRequestHttpException('User is not found');
+        }
+
+        if ($request->bodyParams['type'] === StripeLog::TYPE_CUSTOMER_SUBSCRIPTION_CREATED) {
+            /** @var Product $prod */
+            $prod = Product::find()->where(['stripe_product_id' => $request->bodyParams['plan']['product']]);
+
+            if ($prod) {
+                if ($user->product_id && $user->product_id !== $prod->id) {
+                    // add cancel subscription
+                }
+                $user->product_id = $prod->id;
+                $user->save(false);
+            }
+        }
+
+        return $this->progressLog(
+            $user,
+            $request->bodyParams
+        );
     }
 
     public function actionBillingPortal(): array
