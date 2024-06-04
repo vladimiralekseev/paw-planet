@@ -36,6 +36,7 @@ use Yii;
  * @property int|null $product_id
  * @property string|null $product_expired_date
  * @property int|null $stripe_trial_is_used
+ * @property string|null $subscription_status
  *
  * @property Files $img
  * @property LostPet[] $lostPets
@@ -73,6 +74,7 @@ class _source_SiteUser extends \yii\db\ActiveRecord
             [['auth_key'], 'string', 'max' => 32],
             [['phone_number', 'country', 'state', 'city', 'stripe_customer_id'], 'string', 'max' => 64],
             [['whats_app', 'facebook'], 'string', 'max' => 256],
+            [['subscription_status'], 'string', 'max' => 16],
             [['username'], 'unique'],
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
@@ -117,6 +119,7 @@ class _source_SiteUser extends \yii\db\ActiveRecord
             'product_id' => 'Product ID',
             'product_expired_date' => 'Product Expired Date',
             'stripe_trial_is_used' => 'Stripe Trial Is Used',
+            'subscription_status' => 'Subscription Status',
         ];
     }
 

@@ -13,7 +13,8 @@ class StripeLog extends _source_StripeLog
     public const TYPE_CUSTOMER_SUBSCRIPTION_UPDATED = 'customer.subscription.updated';
 
     public const SUBSCRIPTION_STATUS_ACTIVE = 'active';
-    public const SUBSCRIPTION_STATUS_TRIALING = 'trialing'; // pause
+    public const SUBSCRIPTION_STATUS_TRIALING = 'trialing';
+    public const SUBSCRIPTION_STATUS_CANCELED = 'canceled';
 
     public function behaviors(): array
     {

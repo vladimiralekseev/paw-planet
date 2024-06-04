@@ -22,6 +22,9 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
     public const STATUS_INACTIVE = 9;
     public const STATUS_ACTIVE   = 10;
 
+    public const SUBSCRIBE_STATUS_ACTIVE = 'active';
+    public const SUBSCRIBE_STATUS_INACTIVE = 'inactive';
+
     public function behaviors(): array
     {
         return [

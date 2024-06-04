@@ -111,20 +111,31 @@ class StripeController extends BaseController
 
         if ($request->bodyParams['type'] === StripeLog::TYPE_CUSTOMER_SUBSCRIPTION_CREATED) {
             $user->product_id = $prod->id;
+            $user->subscription_status = SiteUser::SUBSCRIBE_STATUS_ACTIVE;
             if ($prod->trial_days) {
                 $user->stripe_trial_is_used = 1;
             }
             $user->save(false);
-        } else if ($request->bodyParams['type'] === StripeLog::TYPE_CUSTOMER_SUBSCRIPTION_DELETED) {
+        } elseif ($request->bodyParams['type'] === StripeLog::TYPE_CUSTOMER_SUBSCRIPTION_DELETED) {
             $user->product_id = null;
+            $user->subscription_status = null;
             $user->save(false);
-        } else if ($request->bodyParams['type'] === StripeLog::TYPE_CUSTOMER_SUBSCRIPTION_UPDATED) {
-            if ($object['status'] === StripeLog::SUBSCRIPTION_STATUS_ACTIVE) {
+        } elseif ($request->bodyParams['type'] === StripeLog::TYPE_CUSTOMER_SUBSCRIPTION_UPDATED) {
+            if (in_array(
+                $object['status'],
+                [StripeLog::SUBSCRIPTION_STATUS_ACTIVE, StripeLog::SUBSCRIPTION_STATUS_TRIALING],
+                true
+            )) {
                 $user->product_id = $prod->id;
+                $user->subscription_status = SiteUser::SUBSCRIBE_STATUS_ACTIVE;
                 $user->save(false);
-            }
-            if ($object['status'] === StripeLog::SUBSCRIPTION_STATUS_TRIALING) {
+            } else if ($object['status'] === StripeLog::SUBSCRIPTION_STATUS_CANCELED) {
                 $user->product_id = null;
+                $user->subscription_status = null;
+                $user->save(false);
+            } else {
+                $user->product_id = $prod->id;
+                $user->subscription_status = SiteUser::SUBSCRIBE_STATUS_INACTIVE;
                 $user->save(false);
             }
         }

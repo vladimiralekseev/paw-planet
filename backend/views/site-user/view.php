@@ -117,6 +117,19 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'format'    => 'html',
                         ],
+                        [
+                            'attribute' => 'Product',
+                            'value'     => static function (SiteUser $model) {
+                                return $model->product_id ? $model->product->name : null;
+                            },
+                        ],
+                        'subscription_status',
+                        [
+                            'attribute' => 'stripe_trial_is_used',
+                            'value'     => static function (SiteUser $model) {
+                                return $model->stripe_trial_is_used ? 'Yes' : 'No';
+                            },
+                        ],
                         'created_at',
                         'updated_at',
                     ],
