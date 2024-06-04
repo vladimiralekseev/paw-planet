@@ -10,6 +10,10 @@ class StripeLog extends _source_StripeLog
 {
     public const TYPE_CUSTOMER_SUBSCRIPTION_CREATED = 'customer.subscription.created';
     public const TYPE_CUSTOMER_SUBSCRIPTION_DELETED = 'customer.subscription.deleted';
+    public const TYPE_CUSTOMER_SUBSCRIPTION_UPDATED = 'customer.subscription.updated';
+
+    public const SUBSCRIPTION_STATUS_ACTIVE = 'active';
+    public const SUBSCRIPTION_STATUS_TRIALING = 'trialing'; // pause
 
     public function behaviors(): array
     {

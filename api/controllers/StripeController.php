@@ -103,20 +103,30 @@ class StripeController extends BaseController
             throw new BadRequestHttpException('User is not found');
         }
 
-        if ($request->bodyParams['type'] === StripeLog::TYPE_CUSTOMER_SUBSCRIPTION_CREATED) {
-            /** @var Product $prod */
-            $prod = Product::find()->where(['stripe_product_id' => $object['plan']['product']])->one();
+        /** @var Product $prod */
+        $prod = Product::find()->where(['stripe_product_id' => $object['plan']['product']])->one();
+        if (!$prod) {
+            throw new BadRequestHttpException('Product is not found. Id: ' . $object['plan']['product']);
+        }
 
-            if ($prod) {
-                $user->product_id = $prod->id;
-                if ($prod->trial_days) {
-                    $user->stripe_trial_is_used = 1;
-                }
-                $user->save(false);
+        if ($request->bodyParams['type'] === StripeLog::TYPE_CUSTOMER_SUBSCRIPTION_CREATED) {
+            $user->product_id = $prod->id;
+            if ($prod->trial_days) {
+                $user->stripe_trial_is_used = 1;
             }
+            $user->save(false);
         } else if ($request->bodyParams['type'] === StripeLog::TYPE_CUSTOMER_SUBSCRIPTION_DELETED) {
             $user->product_id = null;
             $user->save(false);
+        } else if ($request->bodyParams['type'] === StripeLog::TYPE_CUSTOMER_SUBSCRIPTION_UPDATED) {
+            if ($object['status'] === StripeLog::SUBSCRIPTION_STATUS_ACTIVE) {
+                $user->product_id = $prod->id;
+                $user->save(false);
+            }
+            if ($object['status'] === StripeLog::SUBSCRIPTION_STATUS_TRIALING) {
+                $user->product_id = null;
+                $user->save(false);
+            }
         }
 
         return $this->processLog(
