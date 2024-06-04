@@ -14,6 +14,9 @@ use Yii;
  * @property string $type
  * @property int $period
  * @property int $amount
+ * @property string|null $trial_days
+ *
+ * @property SiteUser[] $siteUsers
  */
 class _source_Product extends \yii\db\ActiveRecord
 {
@@ -34,7 +37,7 @@ class _source_Product extends \yii\db\ActiveRecord
             [['name', 'stripe_product_id', 'status', 'type', 'period'], 'required'],
             [['status', 'period', 'amount'], 'integer'],
             [['name'], 'string', 'max' => 128],
-            [['stripe_product_id', 'type'], 'string', 'max' => 64],
+            [['stripe_product_id', 'type', 'trial_days'], 'string', 'max' => 64],
         ];
     }
 
@@ -51,6 +54,17 @@ class _source_Product extends \yii\db\ActiveRecord
             'type' => 'Type',
             'period' => 'Period',
             'amount' => 'Amount',
+            'trial_days' => 'Trial Days',
         ];
+    }
+
+    /**
+     * Gets query for [[SiteUsers]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSiteUsers()
+    {
+        return $this->hasMany(SiteUser::class, ['product_id' => 'id']);
     }
 }

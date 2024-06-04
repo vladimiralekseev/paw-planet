@@ -64,6 +64,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         'stripe_product_id',
                         'amount',
+                        [
+                            'attribute' => 'trial_days',
+                            'label' => 'Trial Period Days',
+                        ],
                     ],
                 ]
             ) ?>

@@ -81,21 +81,23 @@ class Stripe extends Model
     {
         $stripeProduct = $this->getProduct($product->stripe_product_id);
 
-        return $this->stripeClient->checkout->sessions->create(
-            [
-                'customer'    => $user->stripe_customer_id,
-                'success_url' => 'https://' . Yii::$app->params['domainRoot'] . '/payment-success/?session_id={CHECKOUT_SESSION_ID}',
-                'cancel_url'  => 'https://' . Yii::$app->params['domainRoot'] . '/payment-canceled/',
-                'mode'        => 'subscription',
-                'line_items'  => [
-                    [
-                        'price'    => $stripeProduct->default_price,
-                        // For metered billing, do not pass quantity
-                        'quantity' => 1,
-                    ]
-                ],
-            ]
-        );
+        $params = [
+            'customer'    => $user->stripe_customer_id,
+            'success_url' => 'https://' . Yii::$app->params['domainRoot'] . '/payment-success/?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url'  => 'https://' . Yii::$app->params['domainRoot'] . '/payment-canceled/',
+            'mode'        => 'subscription',
+            'line_items'  => [
+                [
+                    'price'    => $stripeProduct->default_price,
+                    // For metered billing, do not pass quantity
+                    'quantity' => 1,
+                ]
+            ],
+        ];
+        if ($product->trial_days && !$user->stripe_trial_is_used) {
+            $params['subscription_data']['trial_period_days'] = $product->trial_days;
+        }
+        return $this->stripeClient->checkout->sessions->create($params);
     }
 
     /**

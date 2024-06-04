@@ -25,6 +25,7 @@ use yii\web\View;
 
     <?= $form->field($model, 'name') ?>
     <?= $form->field($model, 'amount') ?>
+    <?= $form->field($model, 'trial_days')->label('Trial Period Days') ?>
     <?= $form->field($model, 'stripe_product_id')
         ->textInput(['disabled' => !$model->isNewRecord])
         ->hint('Product ID from stripe.com. E.g.: <b>prod_QAGS7cehmHjFf1</b>') ?>

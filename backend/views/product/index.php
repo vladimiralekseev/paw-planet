@@ -106,6 +106,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         'stripe_product_id',
                         'amount',
                         [
+                            'attribute' => 'trial_days',
+                            'label' => 'Trial Period Days',
+                        ],
+                        [
                             'class'          => ActionColumn::class,
                             'contentOptions' => ['style' => 'width:70px; text-align:center;'],
                             'template'       => '{view}{update}',

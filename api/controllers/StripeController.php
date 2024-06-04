@@ -109,6 +109,9 @@ class StripeController extends BaseController
 
             if ($prod) {
                 $user->product_id = $prod->id;
+                if ($prod->trial_days) {
+                    $user->stripe_trial_is_used = 1;
+                }
                 $user->save(false);
             }
         } else if ($request->bodyParams['type'] === StripeLog::TYPE_CUSTOMER_SUBSCRIPTION_DELETED) {

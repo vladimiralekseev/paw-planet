@@ -35,6 +35,7 @@ use Yii;
  * @property string|null $stripe_customer_id
  * @property int|null $product_id
  * @property string|null $product_expired_date
+ * @property int|null $stripe_trial_is_used
  *
  * @property Files $img
  * @property LostPet[] $lostPets
@@ -63,7 +64,7 @@ class _source_SiteUser extends \yii\db\ActiveRecord
     {
         return [
             [['username', 'first_name', 'auth_key', 'password_hash', 'email'], 'required'],
-            [['status', 'img_id', 'small_img_id', 'product_id'], 'integer'],
+            [['status', 'img_id', 'small_img_id', 'product_id', 'stripe_trial_is_used'], 'integer'],
             [['created_at', 'updated_at', 'product_expired_date'], 'safe'],
             [['about', 'my_location'], 'string'],
             [['latitude', 'longitude'], 'number'],
@@ -115,6 +116,7 @@ class _source_SiteUser extends \yii\db\ActiveRecord
             'stripe_customer_id' => 'Stripe Customer ID',
             'product_id' => 'Product ID',
             'product_expired_date' => 'Product Expired Date',
+            'stripe_trial_is_used' => 'Stripe Trial Is Used',
         ];
     }
 
