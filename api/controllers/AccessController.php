@@ -8,6 +8,9 @@ use yii\filters\Cors;
 
 class AccessController extends BaseController
 {
+    public const  ACCESS_CODE_SUBSCRIPTION_IS_ABSENT     = 403001;
+    public const  ACCESS_CODE_SUBSCRIPTION_IS_NOT_ENOUGH = 403002;
+
     public function behaviors(): array
     {
         $behaviors = parent::behaviors();

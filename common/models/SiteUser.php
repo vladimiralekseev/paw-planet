@@ -2,6 +2,8 @@
 
 namespace common\models;
 
+use DateInterval;
+use DateTime;
 use Stripe\Checkout\Session;
 use Stripe\Customer;
 use Stripe\Exception\ApiErrorException;
@@ -22,7 +24,7 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
     public const STATUS_INACTIVE = 9;
     public const STATUS_ACTIVE   = 10;
 
-    public const SUBSCRIBE_STATUS_ACTIVE = 'active';
+    public const SUBSCRIBE_STATUS_ACTIVE   = 'active';
     public const SUBSCRIBE_STATUS_INACTIVE = 'inactive';
 
     public function behaviors(): array
@@ -72,14 +74,20 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
             'whats_app',
             'facebook',
             'status',
-            'status_name' => static function ($model) {
+            'status_name' => static function (SiteUser $model) {
                 return self::getStatusValue($model->status);
             },
-            'img'         => static function ($model) {
-                return $model->img ? $model->img->url : null;
+            'img'         => static function (SiteUser $model) {
+                return $model->img->url ?? null;
             },
-            'small_img'   => static function ($model) {
-                return $model->smallImg ? $model->smallImg->url : null;
+            'small_img'   => static function (SiteUser $model) {
+                return $model->smallImg->url ?? null;
+            },
+            'subscription_active' => static function (SiteUser $model) {
+                return $model->subscription_status === self::SUBSCRIBE_STATUS_ACTIVE;
+            },
+            'subscription_type' =>  static function (SiteUser $model) {
+                return $model->product ?? null;
             },
             'updated_at',
             'created_at',
@@ -302,5 +310,41 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
     public function generateCheckoutSessions(Product $product): Session
     {
         return (new Stripe())->generateCheckoutSessions($this, $product);
+    }
+
+    public function accessToCreateMorePets(): bool
+    {
+        $count = $this->getPets()
+            ->where(
+                [
+                    '>',
+                    'created_at',
+                    (new DateTime())->sub(new DateInterval('P30D'))->format('Y-m-d')
+                ]
+            )
+            ->count();
+        return $this->product && $this->subscription_status === self::SUBSCRIBE_STATUS_ACTIVE &&
+            (
+                $this->product->type === Product::TYPE_PLAN_PREMIUM_PLUS ||
+                ($this->product->type === Product::TYPE_PLAN_PREMIUM && $count < 3)
+            );
+    }
+
+    public function accessToCreateMoreLostPets(): bool
+    {
+        $count = $this->getLostPets()
+            ->where(
+                [
+                    '>',
+                    'created_at',
+                    (new DateTime())->sub(new DateInterval('P30D'))->format('Y-m-d')
+                ]
+            )
+            ->count();
+        return $this->product && $this->subscription_status === self::SUBSCRIBE_STATUS_ACTIVE &&
+            (
+                $this->product->type === Product::TYPE_PLAN_PREMIUM_PLUS ||
+                ($this->product->type === Product::TYPE_PLAN_PREMIUM && $count < 3)
+            );
     }
 }

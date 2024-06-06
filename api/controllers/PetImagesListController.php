@@ -5,14 +5,23 @@ namespace api\controllers;
 use common\models\Pet;
 use yii\web\NotFoundHttpException;
 
-class PetImagesListController extends BaseController
+class PetImagesListController extends AccessPremiumController
 {
     /**
      * Pet Images list
      *
      * @OA\Get(
      *     path="/pet-images/list/{pet_id}/",
+     *     security={{"bearerAuth":{}}},
      *     tags={"Pet Images"},
+     *     @OA\SecurityScheme(
+     *          securityScheme="bearerAuth",
+     *          in="header",
+     *          name="bearerAuth",
+     *          type="http",
+     *          scheme="bearer",
+     *          bearerFormat="JWT",
+     *      ),
      *     @OA\Parameter(
      *          name="pet_id",
      *          in="path",

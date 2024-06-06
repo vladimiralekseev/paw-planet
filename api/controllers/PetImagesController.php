@@ -11,7 +11,7 @@ use yii\db\StaleObjectException;
 use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
 
-class PetImagesController extends AccessController
+class PetImagesController extends AccessPremiumController
 {
     public function behaviors(): array
     {

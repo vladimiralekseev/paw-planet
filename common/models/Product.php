@@ -7,8 +7,8 @@ class Product extends _source_Product
     public const STATUS_ACTIVE   = 1;
     public const STATUS_INACTIVE = 0;
 
-    public const TYPE_PLAN_1 = 'premium';
-    public const TYPE_PLAN_2 = 'premium-plus';
+    public const TYPE_PLAN_PREMIUM      = 'premium';
+    public const TYPE_PLAN_PREMIUM_PLUS = 'premium-plus';
 
     public const PERIOD_1  = 1;
     public const PERIOD_3  = 3;
@@ -30,11 +30,31 @@ class Product extends _source_Product
         );
     }
 
+    public function fields(): array
+    {
+        return [
+            'id',
+            'name',
+            'stripe_product_id',
+            'status',
+            'status_name' => static function (Product $model) {
+                return self::getStatusValue($model->status);
+            },
+            'type',
+            'period',
+            'amount',
+            'trial_days',
+        ];
+    }
+
     public function attributeLabels(): array
     {
-        return array_merge(parent::attributeLabels(), [
-            'amount' => 'Amount (in cents)',
-        ]);
+        return array_merge(
+            parent::attributeLabels(),
+            [
+                'amount' => 'Amount (in cents)',
+            ]
+        );
     }
 
     public static function getStatusList(): array
@@ -55,8 +75,8 @@ class Product extends _source_Product
     public static function getTypeList(): array
     {
         return [
-            self::TYPE_PLAN_1 => 'Premium',
-            self::TYPE_PLAN_2 => 'Premium plus',
+            self::TYPE_PLAN_PREMIUM      => 'Premium',
+            self::TYPE_PLAN_PREMIUM_PLUS => 'Premium plus',
         ];
     }
 
