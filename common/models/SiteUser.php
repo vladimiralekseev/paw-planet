@@ -323,16 +323,7 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
                 ]
             )
             ->count();
-        return $this->product && $this->subscription_status === self::SUBSCRIBE_STATUS_ACTIVE &&
-            (
-                $this->product->type === Product::TYPE_PLAN_PREMIUM_PLUS ||
-                ($this->product->type === Product::TYPE_PLAN_PREMIUM && $count < 3)
-            );
-    }
-
-    public function accessToCreateMoreLostPets(): bool
-    {
-        $count = $this->getLostPets()
+        $count2 = $this->getLostPets()
             ->where(
                 [
                     '>',
@@ -344,7 +335,12 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
         return $this->product && $this->subscription_status === self::SUBSCRIBE_STATUS_ACTIVE &&
             (
                 $this->product->type === Product::TYPE_PLAN_PREMIUM_PLUS ||
-                ($this->product->type === Product::TYPE_PLAN_PREMIUM && $count < 3)
+                ($this->product->type === Product::TYPE_PLAN_PREMIUM && ($count + $count2 < 3))
             );
+    }
+
+    public function accessToCreateMoreLostPets(): bool
+    {
+        return $this->accessToCreateMorePets();
     }
 }
