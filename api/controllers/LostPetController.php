@@ -244,6 +244,7 @@ class LostPetController extends AccessPremiumController
     {
         /** @var SiteUser $user */
         $user = Yii::$app->user->identity;
+        $user->refresh();
         if (!$user->accessToCreateMoreLostPets()) {
             throw new ForbiddenHttpException(
                 'To create more than 3 Pets in a month you should have Premium Plus subscription.',

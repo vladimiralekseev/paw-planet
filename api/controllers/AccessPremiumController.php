@@ -21,6 +21,7 @@ class AccessPremiumController extends AccessController
                     'matchCallback' => function ($rule, $action) {
                         /** @var SiteUser $user */
                         $user = Yii::$app->user->identity;
+                        $user->refresh();
                         if ($user->product && $user->subscription_status === SiteUser::SUBSCRIBE_STATUS_ACTIVE) {
                             return true;
                         }

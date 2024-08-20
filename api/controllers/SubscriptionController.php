@@ -70,6 +70,7 @@ class SubscriptionController extends AccessController
     {
         /** @var SiteUser $user */
         $user = Yii::$app->user->identity;
+        $user->refresh();
 
         $subscriptionCheckoutForm = new SubscriptionCheckoutForm();
         $subscriptionCheckoutForm->load(Yii::$app->request->post());
@@ -118,6 +119,7 @@ class SubscriptionController extends AccessController
     {
         /** @var SiteUser $user */
         $user = Yii::$app->user->identity;
+        $user->refresh();
 
         $subscriptionCheckoutForm = new SubscriptionCancelForm();
         $subscriptionCheckoutForm->load(Yii::$app->request->post());

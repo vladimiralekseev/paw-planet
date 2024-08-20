@@ -62,6 +62,7 @@ class UserProfileForm extends Model
         }
         /** @var SiteUser $user */
         $user = Yii::$app->user->identity;
+        $user->refresh();
         $user->first_name = $this->first_name;
         $user->last_name = $this->last_name;
         $user->username = $this->email;

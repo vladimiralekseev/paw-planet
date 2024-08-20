@@ -85,7 +85,10 @@ class UserProfileController extends AccessController
      */
     public function actionIndex(): IdentityInterface
     {
-        return Yii::$app->user->identity;
+        /** @var SiteUser $user */
+        $user = Yii::$app->user->identity;
+        $user->refresh();
+        return $user;
     }
 
     /**
@@ -303,6 +306,7 @@ class UserProfileController extends AccessController
     {
         /** @var SiteUser $user */
         $user = Yii::$app->user->identity;
+        $user->refresh();
         $profilePreviewUploadForm = new ProfilePreviewUploadForm();
         $profileSmallPreviewUploadForm = new ProfileSmallPreviewUploadForm();
 
@@ -385,6 +389,7 @@ class UserProfileController extends AccessController
     {
         /** @var SiteUser $user */
         $user = Yii::$app->user->identity;
+        $user->refresh();
         if ($user->img_id) {
             $user->img->delete();
         }
