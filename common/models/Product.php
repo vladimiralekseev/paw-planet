@@ -24,7 +24,10 @@ class Product extends _source_Product
                     ['status', 'type'],
                     'unique',
                     'targetAttribute' => [1 => 'status', 'type', 'period'],
-                    'message'         => 'Only one Product with current Period and Type can be an active. To activate this Product deactivate another one.'
+                    'message'         => 'Only one Product with current Period and Type can be an active. To activate this Product deactivate another one.',
+                    'when' => static function ($model) {
+                        return (bool) $model->status;
+                    }
                 ],
             ]
         );

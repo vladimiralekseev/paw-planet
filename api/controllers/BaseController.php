@@ -7,12 +7,21 @@ use yii\filters\ContentNegotiator;
 use yii\filters\Cors;
 use yii\rest\Controller;
 use yii\web\Response;
+use yii\filters\HttpCache;
 
 class BaseController extends Controller
 {
     public function behaviors()
     {
         $behaviors = parent::behaviors();
+
+        $behaviors[] = [
+            'class' => HttpCache::class,
+            'cacheControlHeader' => 'public, no-cache',
+            'lastModified' => function ($action, $params) {
+                return '1231231231';
+            }
+        ];
 
         if (Yii::$app->params['corsOrigin']) {
             $behaviors['corsFilter'] = [
@@ -21,7 +30,8 @@ class BaseController extends Controller
                     'Origin'                        => Yii::$app->params['corsOrigin'],
                     'Access-Control-Request-Method' => ['*'],
                     'Access-Control-Allow-Headers'  => ['*'],
-                    'Access-Control-Expose-Headers' => ['*']
+                    'Access-Control-Expose-Headers' => ['*'],
+                    'Access-Control-Max-Age' => 0,
                 ],
             ];
         }
