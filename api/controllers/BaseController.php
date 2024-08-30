@@ -19,7 +19,7 @@ class BaseController extends Controller
             'class' => HttpCache::class,
             'cacheControlHeader' => 'public, no-cache',
             'lastModified' => function ($action, $params) {
-                return '1231231231';
+                return 12312312311;
             }
         ];
 

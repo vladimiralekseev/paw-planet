@@ -51,6 +51,30 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
             [
                 ['status', 'default', 'value' => self::STATUS_INACTIVE],
                 ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
+                [
+                    'product_expired_date',
+                    'datetime',
+                    'format'  => 'php:Y-m-d H:i:s',
+                    'message' => 'The format of Product Expired Date is invalid. Example: 2024-12-30 14:55:00'
+                ],
+//                [
+//                    'product_id',
+//                    'required',
+//                    'when'    => function (SiteUser $model) {
+//                        return !empty($model->product_expired_date);
+//                    },
+//                    'message' => 'Product is required if Product Expired Date is set',
+//                ],
+                [
+                    'product_expired_date',
+                    'required',
+                    'when'    => function (SiteUser $model) {
+                        return !empty($model->product_id);
+                    }, 'whenClient' => "function (attribute, value) {
+                        return $('#siteuser-product_id').val() !== '';
+                    }",
+                    'message' => 'Product Expired Date is required if Product is set',
+                ],
             ]
         );
     }
@@ -74,19 +98,19 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
             'whats_app',
             'facebook',
             'status',
-            'status_name' => static function (SiteUser $model) {
+            'status_name'         => static function (SiteUser $model) {
                 return self::getStatusValue($model->status);
             },
-            'img'         => static function (SiteUser $model) {
+            'img'                 => static function (SiteUser $model) {
                 return $model->img->url ?? null;
             },
-            'small_img'   => static function (SiteUser $model) {
+            'small_img'           => static function (SiteUser $model) {
                 return $model->smallImg->url ?? null;
             },
             'subscription_active' => static function (SiteUser $model) {
                 return $model->subscription_status === self::SUBSCRIBE_STATUS_ACTIVE;
             },
-            'subscription_type' =>  static function (SiteUser $model) {
+            'subscription_type'   => static function (SiteUser $model) {
                 return $model->product ?? null;
             },
             'updated_at',

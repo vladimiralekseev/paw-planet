@@ -1,7 +1,9 @@
 <?php
 
+use common\models\Product;
 use common\models\SiteUser;
 use yii\bootstrap\ActiveForm;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\web\View;
 
@@ -23,7 +25,20 @@ use yii\web\View;
         ]
     ); ?>
 
+    <?= $form->field($model, 'first_name')->textInput(['disabled' => true]) ?>
+    <?= $form->field($model, 'last_name')->textInput(['disabled' => true]) ?>
     <?= $form->field($model, 'status')->dropDownList($model::getStatusList()) ?>
+    <?= $form->field($model, 'product_id')->dropDownList(
+        ArrayHelper::map(
+            Product::find()->all(),
+            'id',
+            function(Product $el) {
+                return $el->getStatusValue($el->status) . ' - ' . $el->name;
+            }
+        ),
+        ['prompt' => '']
+    ) ?>
+    <?= $form->field($model, 'product_expired_date')->textInput(['placeholder' => '2024-12-30 14:55:00']) ?>
     <?= implode('<br>', $model->getErrorSummary(true)) ?>
 
     <div class="form-group">
