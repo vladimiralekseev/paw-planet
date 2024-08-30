@@ -58,7 +58,7 @@ class SubscriptionCancelForm extends Model
             if ($this->response = $stripe->cancelSubscription($user)) {
                 return true;
             }
-            $this->addError('stripe', 'Subscription is not found');
+            $this->addError('stripe', 'Subscription is not found in Stripe.');
 
             return false;
         } catch (ApiErrorException $e) {

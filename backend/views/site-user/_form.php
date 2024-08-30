@@ -27,7 +27,7 @@ use yii\web\View;
 
     <?= $form->field($model, 'first_name')->textInput(['disabled' => true]) ?>
     <?= $form->field($model, 'last_name')->textInput(['disabled' => true]) ?>
-    <?= $form->field($model, 'status')->dropDownList($model::getStatusList()) ?>
+    <?= $form->field($model, 'status')->dropDownList($model::getStatusList())->label('User status') ?>
     <?= $form->field($model, 'product_id')->dropDownList(
         ArrayHelper::map(
             Product::find()->all(),
@@ -38,6 +38,9 @@ use yii\web\View;
         ),
         ['prompt' => '']
     ) ?>
+    <?= $form->field($model, 'subscription_status')->dropDownList(
+            $model::getSubscriptionStatusList(), ['prompt' => '']
+    )->label('Subscription status') ?>
     <?= implode('<br>', $model->getErrorSummary(true)) ?>
 
     <div class="form-group">

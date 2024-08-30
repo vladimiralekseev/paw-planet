@@ -134,6 +134,21 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
         return $ar[$val] ?? $val;
     }
 
+    public static function getSubscriptionStatusList(): array
+    {
+        return [
+            self::SUBSCRIBE_STATUS_ACTIVE   => 'Active',
+            self::SUBSCRIBE_STATUS_INACTIVE => 'Inactive',
+        ];
+    }
+
+    public static function getSubscriptionStatusValue($val): string
+    {
+        $ar = self::getSubscriptionStatusList();
+
+        return $ar[$val] ?? $val;
+    }
+
     /**
      * {@inheritdoc}
      */
