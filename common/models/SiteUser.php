@@ -51,12 +51,12 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
             [
                 ['status', 'default', 'value' => self::STATUS_INACTIVE],
                 ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
-                [
-                    'product_expired_date',
-                    'datetime',
-                    'format'  => 'php:Y-m-d H:i:s',
-                    'message' => 'The format of Product Expired Date is invalid. Example: 2024-12-30 14:55:00'
-                ],
+//                [
+//                    'product_expired_date',
+//                    'datetime',
+//                    'format'  => 'php:Y-m-d H:i:s',
+//                    'message' => 'The format of Product Expired Date is invalid. Example: 2024-12-30 14:55:00'
+//                ],
 //                [
 //                    'product_id',
 //                    'required',
@@ -65,16 +65,16 @@ class SiteUser extends _source_SiteUser implements IdentityInterface
 //                    },
 //                    'message' => 'Product is required if Product Expired Date is set',
 //                ],
-                [
-                    'product_expired_date',
-                    'required',
-                    'when'    => function (SiteUser $model) {
-                        return !empty($model->product_id);
-                    }, 'whenClient' => "function (attribute, value) {
-                        return $('#siteuser-product_id').val() !== '';
-                    }",
-                    'message' => 'Product Expired Date is required if Product is set',
-                ],
+//                [
+//                    'product_expired_date',
+//                    'required',
+//                    'when'    => function (SiteUser $model) {
+//                        return !empty($model->product_id);
+//                    }, 'whenClient' => "function (attribute, value) {
+//                        return $('#siteuser-product_id').val() !== '';
+//                    }",
+//                    'message' => 'Product Expired Date is required if Product is set',
+//                ],
             ]
         );
     }

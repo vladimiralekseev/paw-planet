@@ -38,7 +38,6 @@ use yii\web\View;
         ),
         ['prompt' => '']
     ) ?>
-    <?= $form->field($model, 'product_expired_date')->textInput(['placeholder' => '2024-12-30 14:55:00']) ?>
     <?= implode('<br>', $model->getErrorSummary(true)) ?>
 
     <div class="form-group">
