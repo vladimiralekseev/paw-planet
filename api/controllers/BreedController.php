@@ -49,6 +49,6 @@ class BreedController extends BaseController
      */
     public function actionList(): array
     {
-        return Breed::find()->all();
+        return Breed::find()->orderBy('name')->all();
     }
 }
